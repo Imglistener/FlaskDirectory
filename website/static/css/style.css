@@ -187,6 +187,21 @@ a:hover { color: var(--navy); }
   color: var(--cream);
 }
 
+/* Name header on dashboards: font-size is set inline per user so it
+   scales down for long names, this just keeps it wrapping cleanly
+   instead of overlapping the code tag in the corner. */
+.key-tag__title.dashboard-name {
+  line-height: 1.15;
+  word-break: break-word;
+  padding-right: 0.25rem;
+  margin-top: 0.3rem;
+}
+
+.bg-navy {
+  background-color: var(--navy);
+  color: var(--cream);
+}
+
 .key-tag__perf {
   height: 0;
   border-top: 2px dashed rgba(250,246,236,0.35);

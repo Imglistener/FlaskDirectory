@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Access Denied{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <div class="key-tag">
+            <div class="key-tag__header">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">403</span>
+                <h2 class="key-tag__title">Access denied</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body">
+                <p class="text-muted">Your account doesn't have permission to view this page.</p>
+                <a href="{{ url_for('views.dashboard') }}" class="btn btn-tag">Back to my dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

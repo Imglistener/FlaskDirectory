@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Overseer Dashboard{% endblock %}
+
+{% block content %}
+{% set full_name = current_user.first_name ~ ' ' ~ current_user.last_name %}
+{% set name_size = [2.3 - (full_name|length * 0.045), 1.1]|max %}
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="key-tag mb-4">
+            <div class="key-tag__header">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">OVERSEER</span>
+                <h2 class="key-tag__title dashboard-name" style="font-size: {{ name_size }}rem;">Hi, {{ current_user.first_name }}</h2>
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <div class="px-3 pt-3">
+                <span class="eyebrow">Quick Links</span>
+            </div>
+            <div class="list-group list-group-flush mt-2">
+                <a href="{{ url_for('views.home') }}" class="list-group-item list-group-item-action">Home</a>
+                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <span class="eyebrow">View Only Access</span>
+        <h1 class="mb-4">Overseer Dashboard</h1>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="stat-tag">
+                    <span class="eyebrow">Total Students</span>
+                    <div class="stat-value">{{ students|length }}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-tag">
+                    <span class="eyebrow">Active</span>
+                    <div class="stat-value">{{ students|selectattr('status.value', 'equalto', 'active')|list|length }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="key-tag">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">READ-ONLY</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">All Student Records</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                <div class="table-responsive">
+                    <table class="table table-hover table-tag mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Section</th>
+                                <th>Status</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.student_code }}</td>
+                                <td>{{ student.level_and_section }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if student.status.value == 'active' else ('secondary' if student.status.value == 'inactive' else 'info') }}">
+                                        {{ student.status.value.title() }}
+                                    </span>
+                                </td>
+                                <td>{{ student.phone or '—' }}</td>
+                                <td>{{ student.email or '—' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="6" class="text-center text-muted py-4">No student records yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

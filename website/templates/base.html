@@ -19,9 +19,6 @@
             </button>
 <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('views.home') }}">Home</a>
-        </li>
         {% if current_user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('views.dashboard') }}">Dashboard</a>
@@ -30,6 +27,9 @@
                 <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
             </li>
         {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('views.home') }}">Home</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
             </li>
@@ -43,6 +43,17 @@
     </nav>
 
     <main class="container app-main py-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert tag-alert alert-dismissible fade show mb-3 alert-{{ category }}" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         {% block content %}
         <h1 class="h3 text-primary">Welcome to the Dormitory App</h1>
         <p class="text-muted">This is a simple Bootstrap-based starter layout for your Flask app.</p>

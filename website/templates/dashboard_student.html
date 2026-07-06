@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+{% set full_name = current_user.first_name ~ ' ' ~ current_user.last_name %}
+{% set name_size = [2.3 - (full_name|length * 0.045), 1.1]|max %}
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="key-tag mb-4">
+            <div class="key-tag__header">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">RESIDENT</span>
+                <h2 class="key-tag__title dashboard-name" style="font-size: {{ name_size }}rem;">Hi, {{ current_user.first_name }}</h2>
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <div class="px-3 pt-3">
+                <span class="eyebrow">Quick Links</span>
+            </div>
+            <div class="list-group list-group-flush mt-2">
+                <a href="#profile" class="list-group-item list-group-item-action">My Profile</a>
+                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <span class="eyebrow">Overview</span>
+        <h1 class="mb-4">Dashboard</h1>
+
+        <div class="profile-card mb-4 p-4">
+            <span class="eyebrow">Account Information</span>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <p><strong>Email:</strong> {{ current_user.email }}</p>
+                    <p><strong>Name:</strong> {{ current_user.first_name }} {{ current_user.last_name }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>Account Type:</strong> <span class="badge bg-success">{{ current_user.account_type.value }}</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="profile" class="key-tag">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">PROFILE</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">My Student Record</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                {% if profile %}
+                <p class="text-muted small mb-4">Identity fields like name and student code are managed by the Supervisor. You can update your contact details below.</p>
+
+                <div class="row mb-4">
+                    <div class="col-md-6"><strong>Name:</strong> {{ profile.name }}</div>
+                    <div class="col-md-6"><strong>Student Code:</strong> {{ profile.student_code }}</div>
+                    <div class="col-md-6"><strong>Section:</strong> {{ profile.level_and_section }}</div>
+                    <div class="col-md-6"><strong>Status:</strong>
+                        <span class="badge bg-{{ 'success' if profile.status.value == 'active' else ('secondary' if profile.status.value == 'inactive' else 'info') }}">
+                            {{ profile.status.value.title() }}
+                        </span>
+                    </div>
+                </div>
+
+                <form method="POST" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Phone</label>
+                        <input class="form-control" name="phone" value="{{ profile.phone or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Address</label>
+                        <input class="form-control" name="address" value="{{ profile.address or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Emergency Contact</label>
+                        <input class="form-control" name="emergency_contact" value="{{ profile.emergency_contact or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Emergency Phone</label>
+                        <input class="form-control" name="emergency_phone" value="{{ profile.emergency_phone or '' }}">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-tag">Save Changes</button>
+                    </div>
+                </form>
+                {% else %}
+                <p class="text-muted mb-0">No student record is linked to your account yet. Please contact an administrator to have your profile connected.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

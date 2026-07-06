@@ -5,17 +5,6 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert tag-alert alert-dismissible fade show mb-3 alert-{{ category }}" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
         <div class="key-tag">
             <div class="key-tag__header">
                 <span class="key-tag__hole"></span>
