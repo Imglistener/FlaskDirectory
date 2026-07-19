@@ -22,6 +22,7 @@
             <div class="list-group list-group-flush mt-2">
                 <a href="#students" class="list-group-item list-group-item-action">Student Records</a>
                 <a href="#rooms" class="list-group-item list-group-item-action">Rooms</a>
+                <a href="#absences" class="list-group-item list-group-item-action">Absence Notices</a>
                 <a href="#accounts" class="list-group-item list-group-item-action">Manage Accounts</a>
                 <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">Logout</a>
             </div>
@@ -53,8 +54,8 @@
             </div>
             <div class="col-md-3">
                 <div class="stat-tag">
-                    <span class="eyebrow">Total Accounts</span>
-                    <div class="stat-value">{{ users|length }}</div>
+                    <span class="eyebrow">Absence Notices</span>
+                    <div class="stat-value">{{ absences|length }}</div>
                 </div>
             </div>
         </div>
@@ -91,6 +92,27 @@
                         <div class="col-md-4"><input class="form-control" type="date" name="birth_date" required></div>
                         <div class="col-md-4"><input class="form-control" type="email" name="email" placeholder="Email (optional)"></div>
                         <div class="col-md-4"><input class="form-control" name="phone" placeholder="Phone"></div>
+                        <div class="col-md-6"><input class="form-control" name="address" placeholder="Address"></div>
+                        <div class="col-md-3"><input class="form-control" name="nationality" placeholder="Nationality"></div>
+                        <div class="col-md-3"><input class="form-control" name="home_town" placeholder="Home town"></div>
+                        <div class="col-md-4"><input class="form-control" name="emergency_contact" placeholder="Emergency contact name"></div>
+                        <div class="col-md-4"><input class="form-control" name="emergency_phone" placeholder="Emergency contact phone"></div>
+                        <div class="col-md-4">
+                            <select class="form-control" name="user_id">
+                                <option value="">No linked account</option>
+                                {% for u in unlinked_users %}
+                                <option value="{{ u.id }}">{{ u.first_name }} {{ u.last_name }} ({{ u.email }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted mb-1">Check-in date</label>
+                            <input class="form-control" type="date" name="check_in_date">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted mb-1">Check-out date</label>
+                            <input class="form-control" type="date" name="check_out_date">
+                        </div>
                         <div class="col-12 mt-2">
                             <button type="submit" class="btn btn-tag btn-sm">Save Student</button>
                         </div>
@@ -107,6 +129,7 @@
                                 <th>Status</th>
                                 <th>Room</th>
                                 <th>Phone</th>
+                                <th>Account</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -123,12 +146,19 @@
                                 </td>
                                 <td>{{ student.room.name if student.room else '—' }}</td>
                                 <td>{{ student.phone or '—' }}</td>
+                                <td>
+                                    {% if student.account %}
+                                    <span class="badge bg-navy">{{ student.account.email }}</span>
+                                    {% else %}
+                                    <span class="text-muted small">not linked</span>
+                                    {% endif %}
+                                </td>
                                 <td class="text-end">
                                     <button class="btn btn-sm btn-tag-outline" type="button" data-bs-toggle="collapse" data-bs-target="#edit-{{ student.id }}">Edit</button>
                                 </td>
                             </tr>
                             <tr class="collapse" id="edit-{{ student.id }}">
-                                <td colspan="7">
+                                <td colspan="8">
                                     <form method="POST" action="{{ url_for('views.edit_student', student_id=student.id) }}" class="row g-2 p-3" style="background: var(--cream); border-radius: 12px;">
                                         <div class="col-md-4"><input class="form-control" name="name" value="{{ student.name }}"></div>
                                         <div class="col-md-4"><input class="form-control" name="student_code" value="{{ student.student_code }}"></div>
@@ -136,11 +166,35 @@
                                         <div class="col-md-4"><input class="form-control" name="level_and_section" value="{{ student.level_and_section }}"></div>
                                         <div class="col-md-4"><input class="form-control" name="phone" value="{{ student.phone or '' }}"></div>
                                         <div class="col-md-4"><input class="form-control" type="email" name="email" value="{{ student.email or '' }}"></div>
-                                        <div class="col-md-8"><input class="form-control" name="address" value="{{ student.address or '' }}" placeholder="Address"></div>
+                                        <div class="col-md-6"><input class="form-control" name="address" value="{{ student.address or '' }}" placeholder="Address"></div>
+                                        <div class="col-md-3"><input class="form-control" name="nationality" value="{{ student.nationality or '' }}" placeholder="Nationality"></div>
+                                        <div class="col-md-3"><input class="form-control" name="home_town" value="{{ student.home_town or '' }}" placeholder="Home town"></div>
+                                        <div class="col-md-4"><input class="form-control" name="emergency_contact" value="{{ student.emergency_contact or '' }}" placeholder="Emergency contact name"></div>
+                                        <div class="col-md-4"><input class="form-control" name="emergency_phone" value="{{ student.emergency_phone or '' }}" placeholder="Emergency contact phone"></div>
                                         <div class="col-md-4">
                                             <select class="form-control" name="status">
                                                 {% for s in StudentStatus %}
                                                 <option value="{{ s.value }}" {% if student.status == s %}selected{% endif %}>{{ s.value.title() }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small text-muted mb-1">Check-in date</label>
+                                            <input class="form-control" type="date" name="check_in_date" value="{{ student.check_in_date.strftime('%Y-%m-%d') if student.check_in_date else '' }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small text-muted mb-1">Check-out date</label>
+                                            <input class="form-control" type="date" name="check_out_date" value="{{ student.check_out_date.strftime('%Y-%m-%d') if student.check_out_date else '' }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small text-muted mb-1">Linked account</label>
+                                            <select class="form-control" name="user_id">
+                                                <option value="">No linked account</option>
+                                                {% if student.account %}
+                                                <option value="{{ student.account.id }}" selected>{{ student.account.first_name }} {{ student.account.last_name }} ({{ student.account.email }})</option>
+                                                {% endif %}
+                                                {% for u in unlinked_users %}
+                                                <option value="{{ u.id }}">{{ u.first_name }} {{ u.last_name }} ({{ u.email }})</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -155,7 +209,7 @@
                                 </td>
                             </tr>
                             {% else %}
-                            <tr><td colspan="7" class="text-center text-muted py-4">No student records yet.</td></tr>
+                            <tr><td colspan="8" class="text-center text-muted py-4">No student records yet.</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -270,6 +324,49 @@
                         <p class="text-muted mb-0">No rooms have been set up yet.</p>
                     </div>
                     {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ABSENCE NOTICES -->
+        <div id="absences" class="key-tag mb-4">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">ABSENCES</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">Absence Notices</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                <div class="table-responsive">
+                    <table class="table table-hover table-tag mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Date</th>
+                                <th>Reason</th>
+                                <th>Submitted</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for notice in absences %}
+                            <tr>
+                                <td>{{ notice.student.name }}</td>
+                                <td>{{ notice.date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ notice.reason }}</td>
+                                <td>{{ notice.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td class="text-end">
+                                    <form method="POST" action="{{ url_for('views.delete_absence_notice', notice_id=notice.id) }}"
+                                          onsubmit="return confirm('Remove this absence notice?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Dismiss</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" class="text-center text-muted py-4">No absence notices submitted yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

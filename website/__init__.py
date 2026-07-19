@@ -19,7 +19,9 @@ def create_app() -> Flask:
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Room, Students  # Students was missing, so db.create_all() never made that table
+    # AbsenceNotice was added, so it's imported here alongside the rest of
+    # the models to make sure db.create_all() below picks up its table too.
+    from .models import User, Room, Students, AbsenceNotice
     create_database(app)
 
     login_manager = LoginManager()
@@ -37,9 +39,6 @@ def create_app() -> Flask:
     return app
 
 def create_database(app):
-    # BUG FIX: 'website/' + DB_NAME only worked if the process happened to be
-    # launched from the exact parent directory of this package. Resolving
-    # the path relative to this file makes it work regardless of cwd.
     db_path = path.join(path.dirname(path.abspath(__file__)), DB_NAME)
     if not path.exists(db_path):
         with app.app_context():

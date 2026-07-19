@@ -21,6 +21,7 @@
             </div>
             <div class="list-group list-group-flush mt-2">
                 <a href="#profile" class="list-group-item list-group-item-action">My Profile</a>
+                <a href="#absences" class="list-group-item list-group-item-action">Report Absence</a>
                 <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">Logout</a>
             </div>
         </div>
@@ -43,7 +44,7 @@
             </div>
         </div>
 
-        <div id="profile" class="key-tag">
+        <div id="profile" class="key-tag mb-4">
             <div class="key-tag__header" style="padding-bottom: 1.2rem;">
                 <span class="key-tag__hole"></span>
                 <span class="key-tag__code">PROFILE</span>
@@ -88,6 +89,51 @@
                 </form>
                 {% else %}
                 <p class="text-muted mb-0">No student record is linked to your account yet. Please contact an administrator to have your profile connected.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ABSENCE NOTICES -->
+        <div id="absences" class="key-tag">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">ABSENCE</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">Report an Absence</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                {% if profile %}
+                <p class="text-muted small mb-3">Let the Supervisor and Overseer know ahead of time if you'll be away.</p>
+
+                <form method="POST" action="{{ url_for('views.add_absence_notice') }}" class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">Date</label>
+                        <input class="form-control" type="date" name="date" required>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Reason</label>
+                        <input class="form-control" name="reason" placeholder="e.g. Medical appointment" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-tag btn-sm">Submit Notice</button>
+                    </div>
+                </form>
+
+                <p class="text-muted small mb-2">Your submitted notices:</p>
+                <ul class="list-group list-group-flush">
+                    {% for notice in absences %}
+                    <li class="list-group-item px-0 d-flex justify-content-between align-items-start flex-wrap gap-1">
+                        <div>
+                            <strong>{{ notice.date.strftime('%Y-%m-%d') }}</strong> — {{ notice.reason }}
+                        </div>
+                        <span class="text-muted small">submitted {{ notice.submitted_at.strftime('%Y-%m-%d') }}</span>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item px-0 text-muted">No absence notices submitted yet.</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted mb-0">No student record is linked to your account yet, so absence notices can't be submitted. Please contact an administrator.</p>
                 {% endif %}
             </div>
         </div>

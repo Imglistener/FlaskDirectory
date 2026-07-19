@@ -43,9 +43,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
-    # BUG FIX: this column was being set in __init__ but never declared,
-    # which raised an AttributeError/UnmappedColumnError as soon as a
-    # room_id was passed in.
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=True)
 
     # One login account can be linked to one student profile record.
@@ -105,3 +102,17 @@ class Students(db.Model):
     photo = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, nullable=False, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, nullable=False, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+
+class AbsenceNotice(db.Model):
+    """A student-submitted notice declaring a day they'll be absent, with a
+    reason, visible to Supervisors (Admin) and Overseers (Moderator)."""
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    reason = db.Column(db.Text, nullable=False)
+    submitted_at = db.Column(db.DateTime, nullable=False, server_default=db.func.current_timestamp())
+
+    student = db.relationship(
+        'Students', backref=db.backref('absence_notices', lazy=True, order_by='AbsenceNotice.date.desc()')
+    )

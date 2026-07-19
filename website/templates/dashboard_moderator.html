@@ -20,7 +20,8 @@
                 <span class="eyebrow">Quick Links</span>
             </div>
             <div class="list-group list-group-flush mt-2">
-                <a href="{{ url_for('views.home') }}" class="list-group-item list-group-item-action">Home</a>
+                <a href="#students" class="list-group-item list-group-item-action">Student Records</a>
+                <a href="#absences" class="list-group-item list-group-item-action">Absence Notices</a>
                 <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">Logout</a>
             </div>
         </div>
@@ -31,21 +32,27 @@
         <h1 class="mb-4">Overseer Dashboard</h1>
 
         <div class="row g-3 mb-4">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="stat-tag">
                     <span class="eyebrow">Total Students</span>
                     <div class="stat-value">{{ students|length }}</div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="stat-tag">
                     <span class="eyebrow">Active</span>
                     <div class="stat-value">{{ students|selectattr('status.value', 'equalto', 'active')|list|length }}</div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="stat-tag">
+                    <span class="eyebrow">Absence Notices</span>
+                    <div class="stat-value">{{ absences|length }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="key-tag">
+        <div id="students" class="key-tag mb-4">
             <div class="key-tag__header" style="padding-bottom: 1.2rem;">
                 <span class="key-tag__hole"></span>
                 <span class="key-tag__code">READ-ONLY</span>
@@ -81,6 +88,42 @@
                             </tr>
                             {% else %}
                             <tr><td colspan="6" class="text-center text-muted py-4">No student records yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABSENCE NOTICES (read-only) -->
+        <div id="absences" class="key-tag">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">READ-ONLY</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">Absence Notices</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                <div class="table-responsive">
+                    <table class="table table-hover table-tag mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Date</th>
+                                <th>Reason</th>
+                                <th>Submitted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for notice in absences %}
+                            <tr>
+                                <td>{{ notice.student.name }}</td>
+                                <td>{{ notice.date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ notice.reason }}</td>
+                                <td>{{ notice.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="4" class="text-center text-muted py-4">No absence notices submitted yet.</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>

@@ -3,10 +3,21 @@ from flask_login import login_required, current_user
 from datetime import datetime
 
 from . import db
-from .models import User, UserRole, Students, Gender, StudentStatus, Room
+from .models import User, UserRole, Students, Gender, StudentStatus, Room, AbsenceNotice
 from .permissions import roles_required
 
 views = Blueprint('views', __name__)
+
+
+def _parse_optional_date(field_name, form):
+    """Parse an optional YYYY-MM-DD form field. Returns (date_or_None, error_message)."""
+    raw = form.get(field_name)
+    if not raw:
+        return None, None
+    try:
+        return datetime.strptime(raw, '%Y-%m-%d').date(), None
+    except ValueError:
+        return None, f'Please provide a valid {field_name.replace("_", " ")}.'
 
 
 @views.route('/')
@@ -40,12 +51,20 @@ def dashboard_admin():
     students = Students.query.order_by(Students.name).all()
     users = User.query.order_by(User.first_name).all()
     rooms = Room.query.order_by(Room.name).all()
+    absences = AbsenceNotice.query.order_by(AbsenceNotice.date.desc()).all()
+    # Accounts eligible to be linked to a student record: STUDENT-role
+    # accounts that don't already have a student profile attached.
+    unlinked_users = [
+        u for u in users if u.account_type == UserRole.STUDENT and u.student_profile is None
+    ]
     return render_template(
         "dashboard_admin.html",
         user=current_user,
         students=students,
         users=users,
         rooms=rooms,
+        absences=absences,
+        unlinked_users=unlinked_users,
         Gender=Gender,
         StudentStatus=StudentStatus,
         UserRole=UserRole,
@@ -62,6 +81,30 @@ def add_student():
         flash('Please provide a valid birth date.', category='error')
         return redirect(url_for('views.dashboard_admin'))
 
+    check_in_date, err = _parse_optional_date('check_in_date', request.form)
+    if err:
+        flash(err, category='error')
+        return redirect(url_for('views.dashboard_admin'))
+
+    check_out_date, err = _parse_optional_date('check_out_date', request.form)
+    if err:
+        flash(err, category='error')
+        return redirect(url_for('views.dashboard_admin'))
+
+    # Optionally link this new record to an existing STUDENT-role account
+    # that isn't linked to a student profile yet.
+    linked_user_id = None
+    raw_user_id = request.form.get('user_id')
+    if raw_user_id:
+        linked_user = User.query.get(int(raw_user_id))
+        if not linked_user:
+            flash('Selected account could not be found.', category='error')
+            return redirect(url_for('views.dashboard_admin'))
+        if linked_user.student_profile is not None:
+            flash(f'{linked_user.first_name} is already linked to a student record.', category='error')
+            return redirect(url_for('views.dashboard_admin'))
+        linked_user_id = linked_user.id
+
     new_student = Students(
         name=request.form.get('name'),
         student_code=request.form.get('student_code'),
@@ -72,6 +115,14 @@ def add_student():
         birth_date=birth_date,
         email=request.form.get('email') or None,
         phone=request.form.get('phone'),
+        address=request.form.get('address'),
+        nationality=request.form.get('nationality'),
+        home_town=request.form.get('home_town'),
+        emergency_contact=request.form.get('emergency_contact'),
+        emergency_phone=request.form.get('emergency_phone'),
+        check_in_date=check_in_date,
+        check_out_date=check_out_date,
+        user_id=linked_user_id,
     )
     db.session.add(new_student)
     db.session.commit()
@@ -91,10 +142,44 @@ def edit_student(student_id):
     student.phone = request.form.get('phone', student.phone)
     student.email = request.form.get('email') or student.email
     student.address = request.form.get('address', student.address)
+    student.nationality = request.form.get('nationality', student.nationality)
+    student.home_town = request.form.get('home_town', student.home_town)
+    student.emergency_contact = request.form.get('emergency_contact', student.emergency_contact)
+    student.emergency_phone = request.form.get('emergency_phone', student.emergency_phone)
+
+    check_in_date, err = _parse_optional_date('check_in_date', request.form)
+    if err:
+        flash(err, category='error')
+        return redirect(url_for('views.dashboard_admin'))
+    if 'check_in_date' in request.form:
+        student.check_in_date = check_in_date
+
+    check_out_date, err = _parse_optional_date('check_out_date', request.form)
+    if err:
+        flash(err, category='error')
+        return redirect(url_for('views.dashboard_admin'))
+    if 'check_out_date' in request.form:
+        student.check_out_date = check_out_date
 
     status_value = request.form.get('status')
     if status_value:
         student.status = StudentStatus(status_value)
+
+    # Re-link (or unlink) the account tied to this student record.
+    raw_user_id = request.form.get('user_id', '')
+    current_user_id = str(student.user_id) if student.user_id else ''
+    if raw_user_id != current_user_id:
+        if raw_user_id:
+            linked_user = User.query.get(int(raw_user_id))
+            if not linked_user:
+                flash('Selected account could not be found.', category='error')
+                return redirect(url_for('views.dashboard_admin'))
+            if linked_user.student_profile is not None and linked_user.student_profile.id != student.id:
+                flash(f'{linked_user.first_name} is already linked to another student record.', category='error')
+                return redirect(url_for('views.dashboard_admin'))
+            student.user_id = linked_user.id
+        else:
+            student.user_id = None
 
     db.session.commit()
     flash('Student record updated.', category='success')
@@ -283,6 +368,22 @@ def auto_sort_students():
 
 
 # ---------------------------------------------------------------------
+# Absence notices (Supervisor only — dismiss). Submission lives under
+# the Student section below; both Supervisor and Overseer can view them.
+# ---------------------------------------------------------------------
+
+@views.route('/dashboard/admin/absences/<int:notice_id>/delete', methods=['POST'])
+@login_required
+@roles_required(UserRole.ADMIN)
+def delete_absence_notice(notice_id):
+    notice = AbsenceNotice.query.get_or_404(notice_id)
+    db.session.delete(notice)
+    db.session.commit()
+    flash('Absence notice removed.', category='success')
+    return redirect(url_for('views.dashboard_admin'))
+
+
+# ---------------------------------------------------------------------
 # Overseer (Moderator) — read-only access to all student data.
 # ---------------------------------------------------------------------
 
@@ -291,11 +392,13 @@ def auto_sort_students():
 @roles_required(UserRole.MODERATOR)
 def dashboard_moderator():
     students = Students.query.order_by(Students.name).all()
-    return render_template("dashboard_moderator.html", user=current_user, students=students)
+    absences = AbsenceNotice.query.order_by(AbsenceNotice.date.desc()).all()
+    return render_template("dashboard_moderator.html", user=current_user, students=students, absences=absences)
 
 
 # ---------------------------------------------------------------------
-# Normal user — can only see and edit their own linked student record.
+# Normal user — can only see and edit their own linked student record,
+# and can submit absence notices tied to that record.
 # ---------------------------------------------------------------------
 
 @views.route('/dashboard/student', methods=['GET', 'POST'])
@@ -319,4 +422,31 @@ def dashboard_student():
         flash('Your information has been updated.', category='success')
         return redirect(url_for('views.dashboard_student'))
 
-    return render_template("dashboard_student.html", user=current_user, profile=profile)
+    absences = AbsenceNotice.query.filter_by(student_id=profile.id).order_by(AbsenceNotice.date.desc()).all() if profile else []
+    return render_template("dashboard_student.html", user=current_user, profile=profile, absences=absences)
+
+
+@views.route('/dashboard/student/absences/add', methods=['POST'])
+@login_required
+@roles_required(UserRole.STUDENT)
+def add_absence_notice():
+    profile = Students.query.filter_by(user_id=current_user.id).first()
+    if not profile:
+        flash('No student profile is linked to your account yet. Contact an administrator.', category='error')
+        return redirect(url_for('views.dashboard_student'))
+
+    try:
+        absence_date = datetime.strptime(request.form.get('date', ''), '%Y-%m-%d').date()
+    except ValueError:
+        flash('Please provide a valid date for the absence.', category='error')
+        return redirect(url_for('views.dashboard_student'))
+
+    reason = request.form.get('reason', '').strip()
+    if not reason:
+        flash('Please provide a reason for the absence.', category='error')
+        return redirect(url_for('views.dashboard_student'))
+
+    db.session.add(AbsenceNotice(student_id=profile.id, date=absence_date, reason=reason))
+    db.session.commit()
+    flash('Absence notice submitted.', category='success')
+    return redirect(url_for('views.dashboard_student'))
