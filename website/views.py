@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
+from flask_babel import gettext as _
 from datetime import datetime
 
 from . import db
@@ -17,7 +18,7 @@ def _parse_optional_date(field_name, form):
     try:
         return datetime.strptime(raw, '%Y-%m-%d').date(), None
     except ValueError:
-        return None, f'Please provide a valid {field_name.replace("_", " ")}.'
+        return None, _('Please provide a valid %(field)s.', field=field_name.replace("_", " "))
 
 
 @views.route('/')
@@ -78,7 +79,7 @@ def add_student():
     try:
         birth_date = datetime.strptime(request.form.get('birth_date', ''), '%Y-%m-%d').date()
     except ValueError:
-        flash('Please provide a valid birth date.', category='error')
+        flash(_('Please provide a valid birth date.'), category='error')
         return redirect(url_for('views.dashboard_admin'))
 
     check_in_date, err = _parse_optional_date('check_in_date', request.form)
@@ -98,10 +99,10 @@ def add_student():
     if raw_user_id:
         linked_user = User.query.get(int(raw_user_id))
         if not linked_user:
-            flash('Selected account could not be found.', category='error')
+            flash(_('Selected account could not be found.'), category='error')
             return redirect(url_for('views.dashboard_admin'))
         if linked_user.student_profile is not None:
-            flash(f'{linked_user.first_name} is already linked to a student record.', category='error')
+            flash(_('%(name)s is already linked to a student record.', name=linked_user.first_name), category='error')
             return redirect(url_for('views.dashboard_admin'))
         linked_user_id = linked_user.id
 
@@ -126,7 +127,7 @@ def add_student():
     )
     db.session.add(new_student)
     db.session.commit()
-    flash('Student added successfully.', category='success')
+    flash(_('Student added successfully.'), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -172,17 +173,17 @@ def edit_student(student_id):
         if raw_user_id:
             linked_user = User.query.get(int(raw_user_id))
             if not linked_user:
-                flash('Selected account could not be found.', category='error')
+                flash(_('Selected account could not be found.'), category='error')
                 return redirect(url_for('views.dashboard_admin'))
             if linked_user.student_profile is not None and linked_user.student_profile.id != student.id:
-                flash(f'{linked_user.first_name} is already linked to another student record.', category='error')
+                flash(_('%(name)s is already linked to another student record.', name=linked_user.first_name), category='error')
                 return redirect(url_for('views.dashboard_admin'))
             student.user_id = linked_user.id
         else:
             student.user_id = None
 
     db.session.commit()
-    flash('Student record updated.', category='success')
+    flash(_('Student record updated.'), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -193,7 +194,7 @@ def delete_student(student_id):
     student = Students.query.get_or_404(student_id)
     db.session.delete(student)
     db.session.commit()
-    flash('Student record deleted.', category='success')
+    flash(_('Student record deleted.'), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -205,15 +206,15 @@ def update_user_role(user_id):
     new_role = request.form.get('account_type')
 
     if target_user.id == current_user.id:
-        flash("You can't change your own role.", category='error')
+        flash(_("You can't change your own role."), category='error')
         return redirect(url_for('views.dashboard_admin'))
 
     try:
         target_user.account_type = UserRole[new_role]
         db.session.commit()
-        flash(f'{target_user.first_name} is now a {target_user.account_type.value}.', category='success')
+        flash(_('%(name)s is now a %(role)s.', name=target_user.first_name, role=target_user.account_type.value), category='success')
     except KeyError:
-        flash('Unknown role.', category='error')
+        flash(_('Unknown role.'), category='error')
 
     return redirect(url_for('views.dashboard_admin'))
 
@@ -233,7 +234,7 @@ def add_room():
     max_occupancy = request.form.get('max_occupancy')
 
     if not name or not sex or not max_occupancy:
-        flash('Please fill in all room fields.', category='error')
+        flash(_('Please fill in all room fields.'), category='error')
         return redirect(url_for('views.dashboard_admin'))
 
     try:
@@ -241,12 +242,12 @@ def add_room():
         if max_occupancy < 1:
             raise ValueError
     except ValueError:
-        flash('Max occupancy must be a positive whole number.', category='error')
+        flash(_('Max occupancy must be a positive whole number.'), category='error')
         return redirect(url_for('views.dashboard_admin'))
 
     db.session.add(Room(name=name, sex=Gender(sex), max_occupancy=max_occupancy))
     db.session.commit()
-    flash('Room added successfully.', category='success')
+    flash(_('Room added successfully.'), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -266,19 +267,18 @@ def edit_room(room_id):
         try:
             max_occupancy = int(max_occupancy)
         except ValueError:
-            flash('Max occupancy must be a number.', category='error')
+            flash(_('Max occupancy must be a number.'), category='error')
             return redirect(url_for('views.dashboard_admin'))
         if max_occupancy < room.occupant_count:
             flash(
-                f'Room has {room.occupant_count} student(s) assigned; '
-                f'max occupancy cannot be set lower than that.',
+                _('Room has %(count)s student(s) assigned; max occupancy cannot be set lower than that.', count=room.occupant_count),
                 category='error',
             )
             return redirect(url_for('views.dashboard_admin'))
         room.max_occupancy = max_occupancy
 
     db.session.commit()
-    flash('Room updated.', category='success')
+    flash(_('Room updated.'), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -291,7 +291,7 @@ def delete_room(room_id):
         student.room_id = None
     db.session.delete(room)
     db.session.commit()
-    flash('Room deleted. Any assigned students were unassigned.', category='success')
+    flash(_('Room deleted. Any assigned students were unassigned.'), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -303,22 +303,22 @@ def assign_student_to_room(room_id):
     student_id = request.form.get('student_id')
 
     if not student_id:
-        flash('Please select a student to assign.', category='error')
+        flash(_('Please select a student to assign.'), category='error')
         return redirect(url_for('views.dashboard_admin'))
 
     student = Students.query.get_or_404(int(student_id))
 
     if student.sex != room.sex:
-        flash(f'{student.name} cannot be assigned to a {room.sex.value} room.', category='error')
+        flash(_('%(name)s cannot be assigned to a %(sex)s room.', name=student.name, sex=room.sex.value), category='error')
         return redirect(url_for('views.dashboard_admin'))
 
     if room.is_full:
-        flash(f'Room "{room.name}" is already at full occupancy.', category='error')
+        flash(_('Room "%(room)s" is already at full occupancy.', room=room.name), category='error')
         return redirect(url_for('views.dashboard_admin'))
 
     student.room_id = room.id
     db.session.commit()
-    flash(f'{student.name} assigned to "{room.name}".', category='success')
+    flash(_('%(name)s assigned to "%(room)s".', name=student.name, room=room.name), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -330,7 +330,7 @@ def remove_student_from_room(room_id, student_id):
     if student.room_id == room_id:
         student.room_id = None
         db.session.commit()
-        flash(f'{student.name} removed from room.', category='success')
+        flash(_('%(name)s removed from room.', name=student.name), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -358,11 +358,11 @@ def auto_sort_students():
     db.session.commit()
 
     if assigned_count:
-        flash(f'Auto-sorted {assigned_count} student(s) into rooms.', category='success')
+        flash(_('Auto-sorted %(count)s student(s) into rooms.', count=assigned_count), category='success')
     if skipped:
-        flash(f'No available room for: {", ".join(skipped)}.', category='error')
+        flash(_('No available room for: %(names)s.', names=", ".join(skipped)), category='error')
     if not unassigned:
-        flash('No unassigned students to sort.', category='success')
+        flash(_('No unassigned students to sort.'), category='success')
 
     return redirect(url_for('views.dashboard_admin'))
 
@@ -379,7 +379,7 @@ def delete_absence_notice(notice_id):
     notice = AbsenceNotice.query.get_or_404(notice_id)
     db.session.delete(notice)
     db.session.commit()
-    flash('Absence notice removed.', category='success')
+    flash(_('Absence notice removed.'), category='success')
     return redirect(url_for('views.dashboard_admin'))
 
 
@@ -409,7 +409,7 @@ def dashboard_student():
 
     if request.method == 'POST':
         if not profile:
-            flash('No student profile is linked to your account yet. Contact an administrator.', category='error')
+            flash(_('No student profile is linked to your account yet. Contact an administrator.'), category='error')
             return redirect(url_for('views.dashboard_student'))
 
         # Normal users may only update their own contact-type details,
@@ -419,7 +419,7 @@ def dashboard_student():
         profile.emergency_contact = request.form.get('emergency_contact', profile.emergency_contact)
         profile.emergency_phone = request.form.get('emergency_phone', profile.emergency_phone)
         db.session.commit()
-        flash('Your information has been updated.', category='success')
+        flash(_('Your information has been updated.'), category='success')
         return redirect(url_for('views.dashboard_student'))
 
     absences = AbsenceNotice.query.filter_by(student_id=profile.id).order_by(AbsenceNotice.date.desc()).all() if profile else []
@@ -432,21 +432,21 @@ def dashboard_student():
 def add_absence_notice():
     profile = Students.query.filter_by(user_id=current_user.id).first()
     if not profile:
-        flash('No student profile is linked to your account yet. Contact an administrator.', category='error')
+        flash(_('No student profile is linked to your account yet. Contact an administrator.'), category='error')
         return redirect(url_for('views.dashboard_student'))
 
     try:
         absence_date = datetime.strptime(request.form.get('date', ''), '%Y-%m-%d').date()
     except ValueError:
-        flash('Please provide a valid date for the absence.', category='error')
+        flash(_('Please provide a valid date for the absence.'), category='error')
         return redirect(url_for('views.dashboard_student'))
 
     reason = request.form.get('reason', '').strip()
     if not reason:
-        flash('Please provide a reason for the absence.', category='error')
+        flash(_('Please provide a reason for the absence.'), category='error')
         return redirect(url_for('views.dashboard_student'))
 
     db.session.add(AbsenceNotice(student_id=profile.id, date=absence_date, reason=reason))
     db.session.commit()
-    flash('Absence notice submitted.', category='success')
+    flash(_('Absence notice submitted.'), category='success')
     return redirect(url_for('views.dashboard_student'))

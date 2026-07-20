@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Overseer Dashboard{% endblock %}
+{% block title %}{{ _('Overseer Dashboard') }}{% endblock %}
 
 {% block content %}
 {% set full_name = current_user.first_name ~ ' ' ~ current_user.last_name %}
@@ -10,43 +10,43 @@
         <div class="key-tag mb-4">
             <div class="key-tag__header">
                 <span class="key-tag__hole"></span>
-                <span class="key-tag__code">OVERSEER</span>
-                <h2 class="key-tag__title dashboard-name" style="font-size: {{ name_size }}rem;">Hi, {{ current_user.first_name }}</h2>
+                <span class="key-tag__code">{{ _('OVERSEER') }}</span>
+                <h2 class="key-tag__title dashboard-name" style="font-size: {{ name_size }}rem;">{{ _('Hi, %(name)s', name=current_user.first_name) }}</h2>
             </div>
         </div>
 
         <div class="sidebar-card">
             <div class="px-3 pt-3">
-                <span class="eyebrow">Quick Links</span>
+                <span class="eyebrow">{{ _('Quick Links') }}</span>
             </div>
             <div class="list-group list-group-flush mt-2">
-                <a href="#students" class="list-group-item list-group-item-action">Student Records</a>
-                <a href="#absences" class="list-group-item list-group-item-action">Absence Notices</a>
-                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">Logout</a>
+                <a href="#students" class="list-group-item list-group-item-action">{{ _('Student Records') }}</a>
+                <a href="#absences" class="list-group-item list-group-item-action">{{ _('Absence Notices') }}</a>
+                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">{{ _('Logout') }}</a>
             </div>
         </div>
     </div>
 
     <div class="col-md-9">
-        <span class="eyebrow">View Only Access</span>
-        <h1 class="mb-4">Overseer Dashboard</h1>
+        <span class="eyebrow">{{ _('View Only Access') }}</span>
+        <h1 class="mb-4">{{ _('Overseer Dashboard') }}</h1>
 
         <div class="row g-3 mb-4">
             <div class="col-md-4">
                 <div class="stat-tag">
-                    <span class="eyebrow">Total Students</span>
+                    <span class="eyebrow">{{ _('Total Students') }}</span>
                     <div class="stat-value">{{ students|length }}</div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stat-tag">
-                    <span class="eyebrow">Active</span>
+                    <span class="eyebrow">{{ _('Active') }}</span>
                     <div class="stat-value">{{ students|selectattr('status.value', 'equalto', 'active')|list|length }}</div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stat-tag">
-                    <span class="eyebrow">Absence Notices</span>
+                    <span class="eyebrow">{{ _('Absence Notices') }}</span>
                     <div class="stat-value">{{ absences|length }}</div>
                 </div>
             </div>
@@ -55,8 +55,8 @@
         <div id="students" class="key-tag mb-4">
             <div class="key-tag__header" style="padding-bottom: 1.2rem;">
                 <span class="key-tag__hole"></span>
-                <span class="key-tag__code">READ-ONLY</span>
-                <h2 class="key-tag__title" style="font-size: 1.25rem;">All Student Records</h2>
+                <span class="key-tag__code">{{ _('READ-ONLY') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('All Student Records') }}</h2>
             </div>
             <div class="key-tag__perf"></div>
             <div class="key-tag__body pt-3">
@@ -64,12 +64,12 @@
                     <table class="table table-hover table-tag mb-0 align-middle">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Code</th>
-                                <th>Section</th>
-                                <th>Status</th>
-                                <th>Phone</th>
-                                <th>Email</th>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Code') }}</th>
+                                <th>{{ _('Section') }}</th>
+                                <th>{{ _('Status') }}</th>
+                                <th>{{ _('Phone') }}</th>
+                                <th>{{ _('Email') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,7 +87,7 @@
                                 <td>{{ student.email or '—' }}</td>
                             </tr>
                             {% else %}
-                            <tr><td colspan="6" class="text-center text-muted py-4">No student records yet.</td></tr>
+                            <tr><td colspan="6" class="text-center text-muted py-4">{{ _('No student records yet.') }}</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -99,8 +99,8 @@
         <div id="absences" class="key-tag">
             <div class="key-tag__header" style="padding-bottom: 1.2rem;">
                 <span class="key-tag__hole"></span>
-                <span class="key-tag__code">READ-ONLY</span>
-                <h2 class="key-tag__title" style="font-size: 1.25rem;">Absence Notices</h2>
+                <span class="key-tag__code">{{ _('READ-ONLY') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('Absence Notices') }}</h2>
             </div>
             <div class="key-tag__perf"></div>
             <div class="key-tag__body pt-3">
@@ -108,10 +108,10 @@
                     <table class="table table-hover table-tag mb-0 align-middle">
                         <thead>
                             <tr>
-                                <th>Student</th>
-                                <th>Date</th>
-                                <th>Reason</th>
-                                <th>Submitted</th>
+                                <th>{{ _('Student') }}</th>
+                                <th>{{ _('Date') }}</th>
+                                <th>{{ _('Reason') }}</th>
+                                <th>{{ _('Submitted') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,7 +123,7 @@
                                 <td>{{ notice.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
                             </tr>
                             {% else %}
-                            <tr><td colspan="4" class="text-center text-muted py-4">No absence notices submitted yet.</td></tr>
+                            <tr><td colspan="4" class="text-center text-muted py-4">{{ _('No absence notices submitted yet.') }}</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>

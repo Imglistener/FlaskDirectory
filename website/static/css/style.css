@@ -109,6 +109,37 @@ a:hover { color: var(--navy); }
   filter: invert(1) grayscale(1) brightness(2);
 }
 
+/* ---------------- Language switcher ---------------- */
+.lang-switcher .dropdown-toggle {
+  border: 1px solid rgba(217, 164, 65, 0.5);
+  border-radius: 999px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+.lang-switcher .dropdown-toggle::after {
+  margin-left: 0.5rem;
+}
+.lang-switcher .dropdown-menu {
+  background: var(--navy);
+  border: 1px solid rgba(217, 164, 65, 0.35);
+  min-width: 9rem;
+}
+.lang-switcher .dropdown-item {
+  color: rgba(250, 246, 236, 0.85);
+  font-size: 0.88rem;
+}
+.lang-switcher .dropdown-item:hover,
+.lang-switcher .dropdown-item:focus {
+  background: rgba(217, 164, 65, 0.18);
+  color: var(--cream);
+}
+.lang-switcher .dropdown-item.active {
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 600;
+}
+
 /* ---------------- Layout shell ---------------- */
 .app-main {
   max-width: 1080px;

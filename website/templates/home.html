@@ -1,31 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}{{ _('Home') }}{% endblock %}
 
 {% block content %}
 <section class="hero">
-    <span class="eyebrow">Resident Portal</span>
-    <h1 class="hero__headline">Your room, your roommates, your whole hall — in one place.</h1>
-    <p class="hero__sub">Check in on housing announcements, manage your account, and find what you need around the dorm without digging through email threads.</p>
+    <span class="eyebrow">{{ _('Resident Portal') }}</span>
+    <h1 class="hero__headline">{{ _('Your room, your roommates, your whole hall — in one place.') }}</h1>
+    <p class="hero__sub">{{ _("Check in on housing announcements, manage your account, and find what you need around the dorm without digging through email threads.") }}</p>
     <div class="hero__actions d-flex gap-3 flex-wrap">
-        <a href="{{ url_for('auth.signup') }}" class="btn btn-tag">Create an account</a>
-        <a href="{{ url_for('auth.login') }}" class="btn btn-tag-outline">I already have one</a>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-tag">{{ _('Create an account') }}</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-tag-outline">{{ _('I already have one') }}</a>
     </div>
 
     <div class="tag-grid">
         <div class="mini-tag">
-            <span class="eyebrow">Move-in</span>
-            <h3>Check-in details</h3>
-            <p>Key pickup times, room assignments, and what to bring on day one.</p>
+            <span class="eyebrow">{{ _('Move-in') }}</span>
+            <h3>{{ _('Check-in details') }}</h3>
+            <p>{{ _('Key pickup times, room assignments, and what to bring on day one.') }}</p>
         </div>
         <div class="mini-tag">
-            <span class="eyebrow">Community</span>
-            <h3>Hall announcements</h3>
-            <p>Stay current on events, quiet hours, and maintenance windows.</p>
+            <span class="eyebrow">{{ _('Community') }}</span>
+            <h3>{{ _('Hall announcements') }}</h3>
+            <p>{{ _('Stay current on events, quiet hours, and maintenance windows.') }}</p>
         </div>
         <div class="mini-tag">
-            <span class="eyebrow">Support</span>
-            <h3>Get help fast</h3>
-            <p>Reach your RA or facilities team without leaving the app.</p>
+            <span class="eyebrow">{{ _('Support') }}</span>
+            <h3>{{ _('Get help fast') }}</h3>
+            <p>{{ _('Reach your RA or facilities team without leaving the app.') }}</p>
         </div>
     </div>
 </section>

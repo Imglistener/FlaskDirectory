@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}{{ _('Login') }}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -8,31 +8,31 @@
         <div class="key-tag">
             <div class="key-tag__header">
                 <span class="key-tag__hole"></span>
-                <span class="key-tag__code">ACCESS</span>
-                <h2 class="key-tag__title">Welcome back</h2>
+                <span class="key-tag__code">{{ _('ACCESS') }}</span>
+                <h2 class="key-tag__title">{{ _('Welcome back') }}</h2>
             </div>
             <div class="key-tag__perf"></div>
             <div class="key-tag__body">
                 <form method="POST" action="{{ url_for('auth.login') }}">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        <label for="email" class="form-label">{{ _('Email Address') }}</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="{{ _('Enter your email') }}" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                        <label for="password" class="form-label">{{ _('Password') }}</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="{{ _('Enter your password') }}" required>
                     </div>
 
                     <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-tag btn-lg">Login</button>
+                        <button type="submit" class="btn btn-tag btn-lg">{{ _('Login') }}</button>
                     </div>
                 </form>
 
                 <hr class="my-4" style="border-color: var(--line);">
 
                 <p class="text-center text-muted mb-0">
-                    Don't have an account? <a href="{{ url_for('auth.signup') }}" class="fw-bold text-decoration-none">Sign up here</a>
+                    {{ _("Don't have an account?") }} <a href="{{ url_for('auth.signup') }}" class="fw-bold text-decoration-none">{{ _('Sign up here') }}</a>
                 </p>
             </div>
         </div>

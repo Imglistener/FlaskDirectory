@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Sign Up{% endblock %}
+{% block title %}{{ _('Sign Up') }}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -8,50 +8,50 @@
         <div class="key-tag">
             <div class="key-tag__header">
                 <span class="key-tag__hole"></span>
-                <span class="key-tag__code">NEW RESIDENT</span>
-                <h2 class="key-tag__title">Create your account</h2>
+                <span class="key-tag__code">{{ _('NEW RESIDENT') }}</span>
+                <h2 class="key-tag__title">{{ _('Create your account') }}</h2>
             </div>
             <div class="key-tag__perf"></div>
             <div class="key-tag__body">
                 <form method="POST" action="{{ url_for('auth.signup') }}">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
-                        <small class="text-muted">We'll never share your email with anyone else.</small>
+                        <label for="email" class="form-label">{{ _('Email Address') }}</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="{{ _('Enter your email') }}" required>
+                        <small class="text-muted">{{ _("We'll never share your email with anyone else.") }}</small>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                            <label for="firstName" class="form-label">{{ _('First Name') }}</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{ _('Enter your first name') }}" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                            <label for="lastName" class="form-label">{{ _('Last Name') }}</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{ _('Enter your last name') }}" required>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="password1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password1" name="password1" placeholder="Create a password (min 7 characters)" required>
-                        <small class="text-muted">Must be at least 7 characters long.</small>
+                        <label for="password1" class="form-label">{{ _('Password') }}</label>
+                        <input type="password" class="form-control" id="password1" name="password1" placeholder="{{ _('Create a password (min 7 characters)') }}" required>
+                        <small class="text-muted">{{ _('Must be at least 7 characters long.') }}</small>
                     </div>
 
                     <div class="mb-3">
-                        <label for="password2" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm your password" required>
+                        <label for="password2" class="form-label">{{ _('Confirm Password') }}</label>
+                        <input type="password" class="form-control" id="password2" name="password2" placeholder="{{ _('Confirm your password') }}" required>
                     </div>
 
                     <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-tag btn-lg">Create Account</button>
+                        <button type="submit" class="btn btn-tag btn-lg">{{ _('Create Account') }}</button>
                     </div>
                 </form>
 
                 <hr class="my-4" style="border-color: var(--line);">
 
                 <p class="text-center text-muted mb-0">
-                    Already have an account? <a href="{{ url_for('auth.login') }}" class="fw-bold text-decoration-none">Login here</a>
+                    {{ _('Already have an account?') }} <a href="{{ url_for('auth.login') }}" class="fw-bold text-decoration-none">{{ _('Login here') }}</a>
                 </p>
             </div>
         </div>

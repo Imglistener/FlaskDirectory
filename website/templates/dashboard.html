@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}{{ _('Dashboard') }}{% endblock %}
 
 {% block content %}
 <div class="row g-4">
@@ -7,47 +7,47 @@
         <div class="key-tag mb-4">
             <div class="key-tag__header">
                 <span class="key-tag__hole"></span>
-                <span class="key-tag__code">RESIDENT</span>
-                <h2 class="key-tag__title" style="font-size:1.2rem;">Hi, {{ current_user.first_name }}</h2>
+                <span class="key-tag__code">{{ _('RESIDENT') }}</span>
+                <h2 class="key-tag__title" style="font-size:1.2rem;">{{ _('Hi, %(name)s', name=current_user.first_name) }}</h2>
 
             </div>
         </div>
 
         <div class="sidebar-card">
             <div class="px-3 pt-3">
-                <span class="eyebrow">Quick Links</span>
+                <span class="eyebrow">{{ _('Quick Links') }}</span>
             </div>
             <div class="list-group list-group-flush mt-2">
-                <a href="{{ url_for('views.home') }}" class="list-group-item list-group-item-action">Home</a>
-                <a href="#" class="list-group-item list-group-item-action">My Profile</a>
-                <a href="#" class="list-group-item list-group-item-action">Settings</a>
-                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">Logout</a>
+                <a href="{{ url_for('views.home') }}" class="list-group-item list-group-item-action">{{ _('Home') }}</a>
+                <a href="#" class="list-group-item list-group-item-action">{{ _('My Profile') }}</a>
+                <a href="#" class="list-group-item list-group-item-action">{{ _('Settings') }}</a>
+                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">{{ _('Logout') }}</a>
             </div>
         </div>
     </div>
 
     <div class="col-md-9">
-        <span class="eyebrow">Overview</span>
-        <h1 class="mb-4">Dashboard</h1>
+        <span class="eyebrow">{{ _('Overview') }}</span>
+        <h1 class="mb-4">{{ _('Dashboard') }}</h1>
 
         <div class="row g-3">
             <div class="col-md-4">
                 <div class="stat-tag">
-                    <span class="eyebrow">Total Users</span>
+                    <span class="eyebrow">{{ _('Total Users') }}</span>
                     <div class="stat-value">250</div>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="stat-tag">
-                    <span class="eyebrow">Active Sessions</span>
+                    <span class="eyebrow">{{ _('Active Sessions') }}</span>
                     <div class="stat-value">45</div>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="stat-tag">
-                    <span class="eyebrow">Pending Issues</span>
+                    <span class="eyebrow">{{ _('Pending Issues') }}</span>
                     <div class="stat-value">12</div>
                 </div>
             </div>
@@ -56,8 +56,8 @@
         <div class="key-tag mt-4">
             <div class="key-tag__header" style="padding-bottom: 1.2rem;">
                 <span class="key-tag__hole"></span>
-                <span class="key-tag__code">LOG</span>
-                <h2 class="key-tag__title" style="font-size: 1.25rem;">Recent Activity</h2>
+                <span class="key-tag__code">{{ _('LOG') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('Recent Activity') }}</h2>
             </div>
             <div class="key-tag__perf"></div>
             <div class="key-tag__body pt-3">
@@ -65,26 +65,26 @@
                     <table class="table table-hover table-tag mb-0 align-middle">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Activity</th>
-                                <th>Status</th>
+                                <th>{{ _('Date') }}</th>
+                                <th>{{ _('Activity') }}</th>
+                                <th>{{ _('Status') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>2026-06-30</td>
-                                <td>Account Created</td>
-                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>{{ _('Account Created') }}</td>
+                                <td><span class="badge bg-success">{{ _('Completed') }}</span></td>
                             </tr>
                             <tr>
                                 <td>2026-06-30</td>
-                                <td>Profile Setup</td>
-                                <td><span class="badge bg-info">In Progress</span></td>
+                                <td>{{ _('Profile Setup') }}</td>
+                                <td><span class="badge bg-info">{{ _('In Progress') }}</span></td>
                             </tr>
                             <tr>
                                 <td>2026-06-30</td>
-                                <td>Email Verified</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
+                                <td>{{ _('Email Verified') }}</td>
+                                <td><span class="badge bg-warning">{{ _('Pending') }}</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -93,15 +93,15 @@
         </div>
 
         <div class="profile-card mt-4 p-4">
-            <span class="eyebrow">Account Information</span>
+            <span class="eyebrow">{{ _('Account Information') }}</span>
             <div class="row mt-2">
                 <div class="col-md-6">
-                    <p><strong>Email:</strong> {{ current_user.email }}</p>
-                    <p><strong>Name:</strong> {{ current_user.first_name }} {{ current_user.last_name }}</p>
+                    <p><strong>{{ _('Email:') }}</strong> {{ current_user.email }}</p>
+                    <p><strong>{{ _('Name:') }}</strong> {{ current_user.first_name }} {{ current_user.last_name }}</p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Member Since:</strong> 2026-06-30</p>
-                    <p class="mb-0"><strong>Account Status:</strong> <span class="badge bg-success">Active</span></p>
+                    <p><strong>{{ _('Member Since:') }}</strong> 2026-06-30</p>
+                    <p class="mb-0"><strong>{{ _('Account Status:') }}</strong> <span class="badge bg-success">{{ _('Active') }}</span></p>
                 </div>
             </div>
         </div>
