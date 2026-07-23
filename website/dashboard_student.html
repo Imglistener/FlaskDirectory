@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Dashboard') }}{% endblock %}
+
+{% block content %}
+{% set full_name = current_user.first_name ~ ' ' ~ current_user.last_name %}
+{% set name_size = [2.3 - (full_name|length * 0.045), 1.1]|max %}
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="key-tag mb-4">
+            <div class="key-tag__header">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('RESIDENT') }}</span>
+                <h2 class="key-tag__title dashboard-name" style="font-size: {{ name_size }}rem;">{{ _('Hi, %(name)s', name=current_user.first_name) }}</h2>
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <div class="px-3 pt-3">
+                <span class="eyebrow">{{ _('Quick Links') }}</span>
+            </div>
+            <div class="list-group list-group-flush mt-2">
+                <a href="#profile" class="list-group-item list-group-item-action">{{ _('My Profile') }}</a>
+                <a href="#absences" class="list-group-item list-group-item-action">{{ _('Report Absence') }}</a>
+                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">{{ _('Logout') }}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <span class="eyebrow">{{ _('Overview') }}</span>
+        <h1 class="mb-4">{{ _('Dashboard') }}</h1>
+
+        <div class="profile-card mb-4 p-4">
+            <span class="eyebrow">{{ _('Account Information') }}</span>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <p><strong>{{ _('Email:') }}</strong> {{ current_user.email }}</p>
+                    <p><strong>{{ _('Name:') }}</strong> {{ current_user.first_name }} {{ current_user.last_name }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><strong>{{ _('Account Type:') }}</strong> <span class="badge bg-success">{{ current_user.account_type.value }}</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="profile" class="key-tag mb-4">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('PROFILE') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('My Student Record') }}</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                {% if profile %}
+                <p class="text-muted small mb-4">{{ _('Identity and academic fields are managed by the Supervisor and come from the official school registry. You can update your contact details below.') }}</p>
+
+                <div class="row mb-4">
+                    <div class="col-md-6"><strong>{{ _('Name:') }}</strong> {{ profile.name }}</div>
+                    <div class="col-md-6"><strong>{{ _('Student Code:') }}</strong> {{ profile.student_code }}</div>
+                    <div class="col-md-6"><strong>{{ _('CNE:') }}</strong> {{ profile.cne }}</div>
+                    <div class="col-md-6"><strong>{{ _('Class:') }}</strong> {{ profile.classe }} ({{ profile.filiere }}, {{ profile.niveau }})</div>
+                    <div class="col-md-6"><strong>{{ _('Status:') }}</strong>
+                        <span class="badge bg-{{ 'success' if profile.status.value == 'active' else ('secondary' if profile.status.value in ('inactive', 'withdrawn') else 'info') }}">
+                            {{ profile.status.value.title() }}
+                        </span>
+                    </div>
+                </div>
+
+                <form method="POST" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">{{ _('Mobile Phone') }}</label>
+                        <input class="form-control" name="phone" value="{{ profile.phone or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ _('Home Phone') }}</label>
+                        <input class="form-control" name="home_phone" value="{{ profile.home_phone or '' }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">{{ _('Address') }}</label>
+                        <input class="form-control" name="address" value="{{ profile.address or '' }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ _('City') }}</label>
+                        <input class="form-control" name="city" value="{{ profile.city or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ _('Emergency Contact') }}</label>
+                        <input class="form-control" name="emergency_contact" value="{{ profile.emergency_contact or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ _('Emergency Phone') }}</label>
+                        <input class="form-control" name="emergency_phone" value="{{ profile.emergency_phone or '' }}">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-tag">{{ _('Save Changes') }}</button>
+                    </div>
+                </form>
+                {% else %}
+                <p class="text-muted mb-0">{{ _('No student record is linked to your account yet. Please contact an administrator to have your profile connected.') }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ABSENCE NOTICES -->
+        <div id="absences" class="key-tag">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('ABSENCE') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('Report an Absence') }}</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                {% if profile %}
+                <p class="text-muted small mb-3">{{ _("Let the Supervisor and Overseer know ahead of time if you'll be away.") }}</p>
+
+                <form method="POST" action="{{ url_for('views.add_absence_notice') }}" class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">{{ _('Date') }}</label>
+                        <input class="form-control" type="date" name="date" required>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">{{ _('Reason') }}</label>
+                        <input class="form-control" name="reason" placeholder="{{ _('e.g. Medical appointment') }}" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-tag btn-sm">{{ _('Submit Notice') }}</button>
+                    </div>
+                </form>
+
+                <p class="text-muted small mb-2">{{ _('Your submitted notices:') }}</p>
+                <ul class="list-group list-group-flush">
+                    {% for notice in absences %}
+                    <li class="list-group-item px-0 d-flex justify-content-between align-items-start flex-wrap gap-1">
+                        <div>
+                            <strong>{{ notice.date.strftime('%Y-%m-%d') }}</strong> — {{ notice.reason }}
+                        </div>
+                        <span class="text-muted small">{{ _('submitted %(date)s', date=notice.submitted_at.strftime('%Y-%m-%d')) }}</span>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item px-0 text-muted">{{ _('No absence notices submitted yet.') }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted mb-0">{{ _("No student record is linked to your account yet, so absence notices can't be submitted. Please contact an administrator.") }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

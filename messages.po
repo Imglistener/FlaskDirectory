@@ -1,0 +1,1036 @@
+# French translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-07-23 10:31+0000\n"
+"PO-Revision-Date: 2026-07-23 10:33+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: website/auth.py:21
+msgid "Logged in succesfully!"
+msgstr "Connexion réussie !"
+
+#: website/auth.py:25
+msgid "Incorrect password, try again."
+msgstr "Mot de passe incorrect, veuillez réessayer."
+
+#: website/auth.py:29
+msgid "Please enter your password."
+msgstr "Veuillez saisir votre mot de passe."
+
+#: website/auth.py:31
+msgid "There is no account by that Email."
+msgstr "Aucun compte n'est associé à cet e-mail."
+
+#: website/auth.py:52
+msgid "All fields are required."
+msgstr "Tous les champs sont obligatoires."
+
+#: website/auth.py:54
+msgid "Email must be at least 4 characters long."
+msgstr "L'e-mail doit contenir au moins 4 caractères."
+
+#: website/auth.py:56
+msgid "First name must be at least 2 characters long."
+msgstr "Le prénom doit contenir au moins 2 caractères."
+
+#: website/auth.py:58
+msgid "Last name must be at least 2 characters long."
+msgstr "Le nom doit contenir au moins 2 caractères."
+
+#: website/auth.py:60
+msgid "Password must be at least 7 characters long."
+msgstr "Le mot de passe doit contenir au moins 7 caractères."
+
+#: website/auth.py:62
+msgid "Passwords do not match."
+msgstr "Les mots de passe ne correspondent pas."
+
+#: website/auth.py:66
+msgid "Email already exists. Please log in or use a different email."
+msgstr "Cet e-mail existe déjà. Veuillez vous connecter ou utiliser une autre adresse."
+
+#: website/auth.py:86
+msgid "Account created as the Supervisor (admin) account! You can now log in."
+msgstr "Compte créé en tant que Superviseur (administrateur) ! Vous pouvez maintenant vous connecter."
+
+#: website/auth.py:88
+msgid "Account created successfully! You can now log in."
+msgstr "Compte créé avec succès ! Vous pouvez maintenant vous connecter."
+
+#: website/views.py:21
+#, python-format
+msgid "Please provide a valid %(field)s."
+msgstr "Veuillez fournir un(e) %(field)s valide."
+
+#: website/views.py:82
+msgid "Please provide a valid birth date."
+msgstr "Veuillez indiquer une date de naissance valide."
+
+#: website/views.py:102 website/views.py:176
+msgid "Selected account could not be found."
+msgstr "Le compte sélectionné est introuvable."
+
+#: website/views.py:105
+#, python-format
+msgid "%(name)s is already linked to a student record."
+msgstr "%(name)s est déjà lié(e) à une fiche étudiant."
+
+#: website/views.py:130
+msgid "Student added successfully."
+msgstr "Étudiant ajouté avec succès."
+
+#: website/views.py:179
+#, python-format
+msgid "%(name)s is already linked to another student record."
+msgstr "%(name)s est déjà lié(e) à une autre fiche étudiant."
+
+#: website/views.py:186
+msgid "Student record updated."
+msgstr "Fiche étudiant mise à jour."
+
+#: website/views.py:197
+msgid "Student record deleted."
+msgstr "Fiche étudiant supprimée."
+
+#: website/views.py:209
+msgid "You can't change your own role."
+msgstr "Vous ne pouvez pas modifier votre propre rôle."
+
+#: website/views.py:215
+#, python-format
+msgid "%(name)s is now a %(role)s."
+msgstr "%(name)s est désormais %(role)s."
+
+#: website/views.py:217
+msgid "Unknown role."
+msgstr "Rôle inconnu."
+
+#: website/views.py:237
+msgid "Please fill in all room fields."
+msgstr "Veuillez remplir tous les champs de la chambre."
+
+#: website/views.py:245
+msgid "Max occupancy must be a positive whole number."
+msgstr "L'occupation maximale doit être un nombre entier positif."
+
+#: website/views.py:250
+msgid "Room added successfully."
+msgstr "Chambre ajoutée avec succès."
+
+#: website/views.py:270
+msgid "Max occupancy must be a number."
+msgstr "L'occupation maximale doit être un nombre."
+
+#: website/views.py:274
+#, python-format
+msgid ""
+"Room has %(count)s student(s) assigned; max occupancy cannot be set lower"
+" than that."
+msgstr "Cette chambre compte %(count)s étudiant(s) assigné(s) ; l'occupation maximale ne peut pas être inférieure à ce nombre."
+
+#: website/views.py:281
+msgid "Room updated."
+msgstr "Chambre mise à jour."
+
+#: website/views.py:294
+msgid "Room deleted. Any assigned students were unassigned."
+msgstr "Chambre supprimée. Les étudiants assignés ont été désassignés."
+
+#: website/views.py:306
+msgid "Please select a student to assign."
+msgstr "Veuillez sélectionner un étudiant à assigner."
+
+#: website/views.py:312
+#, python-format
+msgid "%(name)s cannot be assigned to a %(sex)s room."
+msgstr "%(name)s ne peut pas être assigné(e) à une chambre %(sex)s."
+
+#: website/views.py:316
+#, python-format
+msgid "Room \"%(room)s\" is already at full occupancy."
+msgstr "La chambre « %(room)s » est déjà à occupation maximale."
+
+#: website/views.py:321
+#, python-format
+msgid "%(name)s assigned to \"%(room)s\"."
+msgstr "%(name)s a été assigné(e) à « %(room)s »."
+
+#: website/views.py:333
+#, python-format
+msgid "%(name)s removed from room."
+msgstr "%(name)s a été retiré(e) de la chambre."
+
+#: website/views.py:361
+#, python-format
+msgid "Auto-sorted %(count)s student(s) into rooms."
+msgstr "%(count)s étudiant(s) réparti(s) automatiquement dans des chambres."
+
+#: website/views.py:363
+#, python-format
+msgid "No available room for: %(names)s."
+msgstr "Aucune chambre disponible pour : %(names)s."
+
+#: website/views.py:365
+msgid "No unassigned students to sort."
+msgstr "Aucun étudiant non assigné à répartir."
+
+#: website/views.py:382
+msgid "Absence notice removed."
+msgstr "Avis d'absence supprimé."
+
+#: website/views.py:412 website/views.py:435
+msgid ""
+"No student profile is linked to your account yet. Contact an "
+"administrator."
+msgstr "Aucune fiche étudiant n'est encore liée à votre compte. Contactez un administrateur."
+
+#: website/views.py:422
+msgid "Your information has been updated."
+msgstr "Vos informations ont été mises à jour."
+
+#: website/views.py:441
+msgid "Please provide a valid date for the absence."
+msgstr "Veuillez indiquer une date valide pour l'absence."
+
+#: website/views.py:446
+msgid "Please provide a reason for the absence."
+msgstr "Veuillez indiquer un motif pour l'absence."
+
+#: website/views.py:451
+msgid "Absence notice submitted."
+msgstr "Avis d'absence soumis."
+
+#: website/templates/403.html:2
+msgid "Access Denied"
+msgstr "Accès refusé"
+
+#: website/templates/403.html:11
+msgid "Access denied"
+msgstr "Accès refusé"
+
+#: website/templates/403.html:15
+msgid "Your account doesn't have permission to view this page."
+msgstr "Votre compte n'est pas autorisé à consulter cette page."
+
+#: website/templates/403.html:16
+msgid "Back to my dashboard"
+msgstr "Retour à mon tableau de bord"
+
+#: website/templates/base.html:6 website/templates/base.html:15
+msgid "Dormitory App"
+msgstr "Application de résidence"
+
+#: website/templates/base.html:24 website/templates/dashboard.html:2
+#: website/templates/dashboard.html:31
+#: website/templates/dashboard_student.html:2
+#: website/templates/dashboard_student.html:32
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: website/templates/base.html:27 website/templates/dashboard.html:24
+#: website/templates/dashboard_admin.html:27
+#: website/templates/dashboard_moderator.html:25
+#: website/templates/dashboard_student.html:25
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: website/templates/base.html:31 website/templates/dashboard.html:21
+#: website/templates/home.html:2
+msgid "Home"
+msgstr "Accueil"
+
+#: website/templates/base.html:34 website/templates/login.html:2
+#: website/templates/login.html:28
+msgid "Login"
+msgstr "Connexion"
+
+#: website/templates/base.html:37 website/templates/signup.html:2
+msgid "Sign Up"
+msgstr "Inscription"
+
+#: website/templates/base.html:70
+msgid "Welcome to the Dormitory App"
+msgstr "Bienvenue sur l'application de résidence"
+
+#: website/templates/base.html:71
+msgid "This is a simple Bootstrap-based starter layout for your Flask app."
+msgstr "Ceci est une mise en page de démarrage simple basée sur Bootstrap pour votre application Flask."
+
+#: website/templates/base.html:76
+msgid "DORMITORY APP · RESIDENT PORTAL"
+msgstr "APPLICATION DE RÉSIDENCE · PORTAIL RÉSIDENT"
+
+#: website/templates/dashboard.html:10
+#: website/templates/dashboard_student.html:13
+msgid "RESIDENT"
+msgstr "RÉSIDENT"
+
+#: website/templates/dashboard.html:11
+#: website/templates/dashboard_admin.html:14
+#: website/templates/dashboard_moderator.html:14
+#: website/templates/dashboard_student.html:14
+#, python-format
+msgid "Hi, %(name)s"
+msgstr "Bonjour, %(name)s"
+
+#: website/templates/dashboard.html:18
+#: website/templates/dashboard_admin.html:20
+#: website/templates/dashboard_moderator.html:20
+#: website/templates/dashboard_student.html:20
+msgid "Quick Links"
+msgstr "Liens rapides"
+
+#: website/templates/dashboard.html:22
+#: website/templates/dashboard_student.html:23
+msgid "My Profile"
+msgstr "Mon profil"
+
+#: website/templates/dashboard.html:23
+msgid "Settings"
+msgstr "Paramètres"
+
+#: website/templates/dashboard.html:30
+#: website/templates/dashboard_student.html:31
+msgid "Overview"
+msgstr "Aperçu"
+
+#: website/templates/dashboard.html:36
+msgid "Total Users"
+msgstr "Nombre total d'utilisateurs"
+
+#: website/templates/dashboard.html:43
+msgid "Active Sessions"
+msgstr "Sessions actives"
+
+#: website/templates/dashboard.html:50
+msgid "Pending Issues"
+msgstr "Problèmes en attente"
+
+#: website/templates/dashboard.html:59
+msgid "LOG"
+msgstr "JOURNAL"
+
+#: website/templates/dashboard.html:60
+msgid "Recent Activity"
+msgstr "Activité récente"
+
+#: website/templates/dashboard.html:68
+#: website/templates/dashboard_admin.html:345
+#: website/templates/dashboard_moderator.html:112
+#: website/templates/dashboard_student.html:110
+msgid "Date"
+msgstr "Date"
+
+#: website/templates/dashboard.html:69
+msgid "Activity"
+msgstr "Activité"
+
+#: website/templates/dashboard.html:70
+#: website/templates/dashboard_admin.html:129
+#: website/templates/dashboard_moderator.html:70
+msgid "Status"
+msgstr "Statut"
+
+#: website/templates/dashboard.html:76
+msgid "Account Created"
+msgstr "Compte créé"
+
+#: website/templates/dashboard.html:77
+msgid "Completed"
+msgstr "Terminé"
+
+#: website/templates/dashboard.html:81
+msgid "Profile Setup"
+msgstr "Configuration du profil"
+
+#: website/templates/dashboard.html:82
+msgid "In Progress"
+msgstr "En cours"
+
+#: website/templates/dashboard.html:86
+msgid "Email Verified"
+msgstr "E-mail vérifié"
+
+#: website/templates/dashboard.html:87
+msgid "Pending"
+msgstr "En attente"
+
+#: website/templates/dashboard.html:96
+#: website/templates/dashboard_student.html:35
+msgid "Account Information"
+msgstr "Informations du compte"
+
+#: website/templates/dashboard.html:99
+#: website/templates/dashboard_student.html:38
+msgid "Email:"
+msgstr "E-mail :"
+
+#: website/templates/dashboard.html:100
+#: website/templates/dashboard_student.html:39
+#: website/templates/dashboard_student.html:59
+msgid "Name:"
+msgstr "Nom :"
+
+#: website/templates/dashboard.html:103
+msgid "Member Since:"
+msgstr "Membre depuis :"
+
+#: website/templates/dashboard.html:104
+msgid "Account Status:"
+msgstr "Statut du compte :"
+
+#: website/templates/dashboard.html:104
+#: website/templates/dashboard_admin.html:45
+#: website/templates/dashboard_moderator.html:43
+msgid "Active"
+msgstr "Actif"
+
+#: website/templates/dashboard_admin.html:2
+#: website/templates/dashboard_admin.html:34
+msgid "Supervisor Dashboard"
+msgstr "Tableau de bord Superviseur"
+
+#: website/templates/dashboard_admin.html:13
+msgid "SUPERVISOR"
+msgstr "SUPERVISEUR"
+
+#: website/templates/dashboard_admin.html:23
+#: website/templates/dashboard_admin.html:68
+#: website/templates/dashboard_moderator.html:23
+msgid "Student Records"
+msgstr "Fiches étudiants"
+
+#: website/templates/dashboard_admin.html:24
+#: website/templates/dashboard_admin.html:51
+#: website/templates/dashboard_admin.html:225
+msgid "Rooms"
+msgstr "Chambres"
+
+#: website/templates/dashboard_admin.html:25
+#: website/templates/dashboard_admin.html:57
+#: website/templates/dashboard_admin.html:336
+#: website/templates/dashboard_moderator.html:24
+#: website/templates/dashboard_moderator.html:49
+#: website/templates/dashboard_moderator.html:103
+msgid "Absence Notices"
+msgstr "Avis d'absence"
+
+#: website/templates/dashboard_admin.html:26
+#: website/templates/dashboard_admin.html:379
+msgid "Manage Accounts"
+msgstr "Gérer les comptes"
+
+#: website/templates/dashboard_admin.html:33
+msgid "Full Access · View &amp; Edit"
+msgstr "Accès complet · Consultation et modification"
+
+#: website/templates/dashboard_admin.html:39
+#: website/templates/dashboard_moderator.html:37
+msgid "Total Students"
+msgstr "Nombre total d'étudiants"
+
+#: website/templates/dashboard_admin.html:67
+msgid "RECORDS"
+msgstr "FICHES"
+
+#: website/templates/dashboard_admin.html:74
+msgid "+ Add Student"
+msgstr "+ Ajouter un étudiant"
+
+#: website/templates/dashboard_admin.html:78
+#: website/templates/dashboard_admin.html:143
+msgid "Academic"
+msgstr "Scolarité"
+
+#: website/templates/dashboard_admin.html:80
+msgid "Level (e.g. Première Année)"
+msgstr "Niveau (p. ex. Première Année)"
+
+#: website/templates/dashboard_admin.html:81
+msgid "Track (e.g. ECS)"
+msgstr "Filière (p. ex. ECS)"
+
+#: website/templates/dashboard_admin.html:82
+msgid "Class (e.g. 1-ECS-1)"
+msgstr "Classe (p. ex. 1-ECS-1)"
+
+#: website/templates/dashboard_admin.html:83
+msgid "Level"
+msgstr "Niveau"
+
+#: website/templates/dashboard_admin.html:83
+msgid "Track"
+msgstr "Filière"
+
+#: website/templates/dashboard_admin.html:83
+msgid "Class"
+msgstr "Classe"
+
+#: website/templates/dashboard_admin.html:79
+msgid "Full name"
+msgstr "Nom complet"
+
+#: website/templates/dashboard_admin.html:80
+msgid "Student code"
+msgstr "Code étudiant"
+
+#: website/templates/dashboard_admin.html:80
+msgid "CNE"
+msgstr "CNE"
+
+#: website/templates/dashboard_admin.html:91
+#: website/templates/dashboard_student.html:60
+msgid "Identity"
+msgstr "Identité"
+
+#: website/templates/dashboard_admin.html:92
+#: website/templates/dashboard_student.html:60
+msgid "Last name"
+msgstr "Nom"
+
+#: website/templates/dashboard_admin.html:92
+#: website/templates/dashboard_student.html:60
+msgid "First name"
+msgstr "Prénom"
+
+#: website/templates/dashboard_admin.html:86
+msgid "Sex"
+msgstr "Sexe"
+
+#: website/templates/dashboard_admin.html:95
+msgid "Birth date"
+msgstr "Date de naissance"
+
+#: website/templates/dashboard_admin.html:96
+msgid "Birth place"
+msgstr "Lieu de naissance"
+
+#: website/templates/dashboard_admin.html:83
+msgid "National ID"
+msgstr "Numéro d'identité national"
+
+#: website/templates/dashboard_admin.html:107
+#: website/templates/dashboard_student.html:64
+msgid "Contact"
+msgstr "Contact"
+
+#: website/templates/dashboard_admin.html:93
+msgid "Email (optional)"
+msgstr "E-mail (facultatif)"
+
+#: website/templates/dashboard_admin.html:94
+#: website/templates/dashboard_admin.html:131
+#: website/templates/dashboard_moderator.html:71
+#: website/templates/dashboard_student.html:71
+msgid "Phone"
+msgstr "Téléphone"
+
+#: website/templates/dashboard_admin.html:109
+#: website/templates/dashboard_student.html:69
+msgid "Mobile phone"
+msgstr "Téléphone mobile"
+
+#: website/templates/dashboard_student.html:69
+msgid "Mobile Phone"
+msgstr "Téléphone mobile"
+
+#: website/templates/dashboard_admin.html:110
+#: website/templates/dashboard_student.html:73
+msgid "Home phone"
+msgstr "Téléphone fixe"
+
+#: website/templates/dashboard_student.html:73
+msgid "Home Phone"
+msgstr "Téléphone fixe"
+
+#: website/templates/dashboard_admin.html:95
+#: website/templates/dashboard_admin.html:169
+#: website/templates/dashboard_student.html:75
+msgid "Address"
+msgstr "Adresse"
+
+#: website/templates/dashboard_admin.html:111
+#: website/templates/dashboard_student.html:79
+msgid "City"
+msgstr "Ville"
+
+#: website/templates/dashboard_admin.html:96
+#: website/templates/dashboard_admin.html:170
+msgid "Nationality"
+msgstr "Nationalité"
+
+#: website/templates/dashboard_admin.html:98
+#: website/templates/dashboard_admin.html:172
+msgid "Emergency contact name"
+msgstr "Nom du contact d'urgence"
+
+#: website/templates/dashboard_admin.html:99
+#: website/templates/dashboard_admin.html:173
+msgid "Emergency contact phone"
+msgstr "Téléphone du contact d'urgence"
+
+#: website/templates/dashboard_admin.html:120
+msgid "Dormitory"
+msgstr "Logement"
+
+#: website/templates/dashboard_admin.html:102
+#: website/templates/dashboard_admin.html:192
+msgid "No linked account"
+msgstr "Aucun compte lié"
+
+#: website/templates/dashboard_admin.html:109
+#: website/templates/dashboard_admin.html:182
+msgid "Check-in date"
+msgstr "Date d'arrivée"
+
+#: website/templates/dashboard_admin.html:113
+#: website/templates/dashboard_admin.html:186
+msgid "Check-out date"
+msgstr "Date de départ"
+
+#: website/templates/dashboard_admin.html:117
+msgid "Save Student"
+msgstr "Enregistrer l'étudiant"
+
+#: website/templates/dashboard_admin.html:126
+#: website/templates/dashboard_admin.html:387
+#: website/templates/dashboard_moderator.html:67
+msgid "Name"
+msgstr "Nom"
+
+#: website/templates/dashboard_admin.html:127
+#: website/templates/dashboard_moderator.html:68
+msgid "Code"
+msgstr "Code"
+
+#: website/templates/dashboard_admin.html:128
+#: website/templates/dashboard_moderator.html:69
+msgid "Section"
+msgstr "Section"
+
+#: website/templates/dashboard_admin.html:130
+msgid "Room"
+msgstr "Chambre"
+
+#: website/templates/dashboard_admin.html:132
+msgid "Account"
+msgstr "Compte"
+
+#: website/templates/dashboard_admin.html:153
+msgid "not linked"
+msgstr "non lié"
+
+#: website/templates/dashboard_admin.html:157
+#: website/templates/dashboard_admin.html:271
+msgid "Edit"
+msgstr "Modifier"
+
+#: website/templates/dashboard_admin.html:190
+msgid "Linked account"
+msgstr "Compte lié"
+
+#: website/templates/dashboard_admin.html:202
+#: website/templates/dashboard_admin.html:291
+#: website/templates/dashboard_student.html:87
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
+
+#: website/templates/dashboard_admin.html:206
+msgid "Delete this student record permanently?"
+msgstr "Supprimer définitivement cette fiche étudiant ?"
+
+#: website/templates/dashboard_admin.html:207
+msgid "Delete Record"
+msgstr "Supprimer la fiche"
+
+#: website/templates/dashboard_admin.html:212
+#: website/templates/dashboard_moderator.html:90
+msgid "No student records yet."
+msgstr "Aucune fiche étudiant pour le moment."
+
+#: website/templates/dashboard_admin.html:224
+msgid "HOUSING"
+msgstr "LOGEMENT"
+
+#: website/templates/dashboard_admin.html:232
+msgid "+ Add Room"
+msgstr "+ Ajouter une chambre"
+
+#: website/templates/dashboard_admin.html:235
+msgid "Auto-assign all unassigned students into rooms matching their sex?"
+msgstr "Assigner automatiquement tous les étudiants non affectés à des chambres correspondant à leur sexe ?"
+
+#: website/templates/dashboard_admin.html:236
+msgid "Auto-sort Unassigned Students"
+msgstr "Répartir automatiquement les étudiants non affectés"
+
+#: website/templates/dashboard_admin.html:242
+msgid "Room name / number"
+msgstr "Nom / numéro de chambre"
+
+#: website/templates/dashboard_admin.html:245
+msgid "Dormitory type"
+msgstr "Type de dortoir"
+
+#: website/templates/dashboard_admin.html:251
+msgid "Max occupancy"
+msgstr "Occupation maximale"
+
+#: website/templates/dashboard_admin.html:253
+msgid "Save Room"
+msgstr "Enregistrer la chambre"
+
+#: website/templates/dashboard_admin.html:273
+msgid "Delete this room? Assigned students will be unassigned."
+msgstr "Supprimer cette chambre ? Les étudiants assignés seront désassignés."
+
+#: website/templates/dashboard_admin.html:274
+msgid "Delete"
+msgstr "Supprimer"
+
+#: website/templates/dashboard_admin.html:301
+msgid "Remove"
+msgstr "Retirer"
+
+#: website/templates/dashboard_admin.html:305
+msgid "No students assigned yet."
+msgstr "Aucun étudiant assigné pour le moment."
+
+#: website/templates/dashboard_admin.html:312
+msgid "Assign a student…"
+msgstr "Assigner un étudiant…"
+
+#: website/templates/dashboard_admin.html:317
+msgid "Assign"
+msgstr "Assigner"
+
+#: website/templates/dashboard_admin.html:324
+msgid "No rooms have been set up yet."
+msgstr "Aucune chambre n'a encore été créée."
+
+#: website/templates/dashboard_admin.html:335
+msgid "ABSENCES"
+msgstr "ABSENCES"
+
+#: website/templates/dashboard_admin.html:344
+#: website/templates/dashboard_moderator.html:111
+msgid "Student"
+msgstr "Étudiant"
+
+#: website/templates/dashboard_admin.html:346
+#: website/templates/dashboard_moderator.html:113
+#: website/templates/dashboard_student.html:114
+msgid "Reason"
+msgstr "Motif"
+
+#: website/templates/dashboard_admin.html:347
+#: website/templates/dashboard_moderator.html:114
+msgid "Submitted"
+msgstr "Soumis"
+
+#: website/templates/dashboard_admin.html:360
+msgid "Remove this absence notice?"
+msgstr "Supprimer cet avis d'absence ?"
+
+#: website/templates/dashboard_admin.html:361
+msgid "Dismiss"
+msgstr "Rejeter"
+
+#: website/templates/dashboard_admin.html:366
+#: website/templates/dashboard_moderator.html:126
+#: website/templates/dashboard_student.html:132
+msgid "No absence notices submitted yet."
+msgstr "Aucun avis d'absence soumis pour le moment."
+
+#: website/templates/dashboard_admin.html:378
+msgid "ROLES"
+msgstr "RÔLES"
+
+#: website/templates/dashboard_admin.html:388
+#: website/templates/dashboard_moderator.html:72
+msgid "Email"
+msgstr "E-mail"
+
+#: website/templates/dashboard_admin.html:389
+msgid "Role"
+msgstr "Rôle"
+
+#: website/templates/dashboard_admin.html:390
+msgid "Change Role"
+msgstr "Modifier le rôle"
+
+#: website/templates/dashboard_admin.html:401
+msgid "(you)"
+msgstr "(vous)"
+
+#: website/templates/dashboard_admin.html:409
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: website/templates/dashboard_moderator.html:2
+#: website/templates/dashboard_moderator.html:32
+msgid "Overseer Dashboard"
+msgstr "Tableau de bord Superviseur en lecture"
+
+#: website/templates/dashboard_moderator.html:13
+msgid "OVERSEER"
+msgstr "SUPERVISEUR EN LECTURE"
+
+#: website/templates/dashboard_moderator.html:31
+msgid "View Only Access"
+msgstr "Accès en lecture seule"
+
+#: website/templates/dashboard_moderator.html:58
+#: website/templates/dashboard_moderator.html:102
+msgid "READ-ONLY"
+msgstr "LECTURE SEULE"
+
+#: website/templates/dashboard_moderator.html:59
+msgid "All Student Records"
+msgstr "Toutes les fiches étudiants"
+
+#: website/templates/dashboard_student.html:24
+msgid "Report Absence"
+msgstr "Signaler une absence"
+
+#: website/templates/dashboard_student.html:42
+msgid "Account Type:"
+msgstr "Type de compte :"
+
+#: website/templates/dashboard_student.html:50
+msgid "PROFILE"
+msgstr "PROFIL"
+
+#: website/templates/dashboard_student.html:51
+msgid "My Student Record"
+msgstr "Ma fiche étudiant"
+
+#: website/templates/dashboard_student.html:56
+msgid ""
+"Identity and academic fields are managed by the Supervisor and come from "
+"the official school registry. You can update your contact details below."
+msgstr "Les champs d'identité et de scolarité sont gérés par le Superviseur et proviennent du registre scolaire officiel. Vous pouvez mettre à jour vos coordonnées ci-dessous."
+
+#: website/templates/dashboard_student.html:60
+msgid "Student Code:"
+msgstr "Code étudiant :"
+
+#: website/templates/dashboard_student.html:61
+msgid "CNE:"
+msgstr "CNE :"
+
+#: website/templates/dashboard_student.html:62
+msgid "Class:"
+msgstr "Classe :"
+
+#: website/templates/dashboard_student.html:63
+msgid "Status:"
+msgstr "Statut :"
+
+#: website/templates/dashboard_student.html:79
+msgid "Emergency Contact"
+msgstr "Contact d'urgence"
+
+#: website/templates/dashboard_student.html:83
+msgid "Emergency Phone"
+msgstr "Téléphone d'urgence"
+
+#: website/templates/dashboard_student.html:91
+msgid ""
+"No student record is linked to your account yet. Please contact an "
+"administrator to have your profile connected."
+msgstr "Aucune fiche étudiant n'est encore liée à votre compte. Veuillez contacter un administrateur pour connecter votre profil."
+
+#: website/templates/dashboard_student.html:100
+msgid "ABSENCE"
+msgstr "ABSENCE"
+
+#: website/templates/dashboard_student.html:101
+msgid "Report an Absence"
+msgstr "Signaler une absence"
+
+#: website/templates/dashboard_student.html:106
+msgid "Let the Supervisor and Overseer know ahead of time if you'll be away."
+msgstr "Prévenez le Superviseur et le Superviseur en lecture à l'avance si vous êtes absent(e)."
+
+#: website/templates/dashboard_student.html:115
+msgid "e.g. Medical appointment"
+msgstr "p. ex. Rendez-vous médical"
+
+#: website/templates/dashboard_student.html:118
+msgid "Submit Notice"
+msgstr "Soumettre l'avis"
+
+#: website/templates/dashboard_student.html:122
+msgid "Your submitted notices:"
+msgstr "Vos avis soumis :"
+
+#: website/templates/dashboard_student.html:129
+#, python-format
+msgid "submitted %(date)s"
+msgstr "soumis le %(date)s"
+
+#: website/templates/dashboard_student.html:136
+msgid ""
+"No student record is linked to your account yet, so absence notices can't"
+" be submitted. Please contact an administrator."
+msgstr "Aucune fiche étudiant n'est encore liée à votre compte, les avis d'absence ne peuvent donc pas être soumis. Veuillez contacter un administrateur."
+
+#: website/templates/home.html:6
+msgid "Resident Portal"
+msgstr "Portail résident"
+
+#: website/templates/home.html:7
+msgid "Your room, your roommates, your whole hall — in one place."
+msgstr "Votre chambre, vos colocataires, tout votre étage — au même endroit."
+
+#: website/templates/home.html:8
+msgid ""
+"Check in on housing announcements, manage your account, and find what you"
+" need around the dorm without digging through email threads."
+msgstr "Consultez les annonces du logement, gérez votre compte et trouvez ce dont vous avez besoin dans la résidence sans fouiller dans vos e-mails."
+
+#: website/templates/home.html:10
+msgid "Create an account"
+msgstr "Créer un compte"
+
+#: website/templates/home.html:11
+msgid "I already have one"
+msgstr "J'en ai déjà un"
+
+#: website/templates/home.html:16
+msgid "Move-in"
+msgstr "Emménagement"
+
+#: website/templates/home.html:17
+msgid "Check-in details"
+msgstr "Détails d'arrivée"
+
+#: website/templates/home.html:18
+msgid "Key pickup times, room assignments, and what to bring on day one."
+msgstr "Horaires de remise des clés, attribution des chambres et ce qu'il faut apporter le premier jour."
+
+#: website/templates/home.html:21
+msgid "Community"
+msgstr "Communauté"
+
+#: website/templates/home.html:22
+msgid "Hall announcements"
+msgstr "Annonces de l'étage"
+
+#: website/templates/home.html:23
+msgid "Stay current on events, quiet hours, and maintenance windows."
+msgstr "Restez informé(e) des événements, des heures de silence et des travaux d'entretien."
+
+#: website/templates/home.html:26
+msgid "Support"
+msgstr "Assistance"
+
+#: website/templates/home.html:27
+msgid "Get help fast"
+msgstr "Obtenez de l'aide rapidement"
+
+#: website/templates/home.html:28
+msgid "Reach your RA or facilities team without leaving the app."
+msgstr "Contactez votre RA ou l'équipe d'entretien sans quitter l'application."
+
+#: website/templates/login.html:11
+msgid "ACCESS"
+msgstr "ACCÈS"
+
+#: website/templates/login.html:12
+msgid "Welcome back"
+msgstr "Bon retour"
+
+#: website/templates/login.html:18 website/templates/signup.html:18
+msgid "Email Address"
+msgstr "Adresse e-mail"
+
+#: website/templates/login.html:19 website/templates/signup.html:19
+msgid "Enter your email"
+msgstr "Saisissez votre e-mail"
+
+#: website/templates/login.html:23 website/templates/signup.html:36
+msgid "Password"
+msgstr "Mot de passe"
+
+#: website/templates/login.html:24
+msgid "Enter your password"
+msgstr "Saisissez votre mot de passe"
+
+#: website/templates/login.html:35
+msgid "Don't have an account?"
+msgstr "Vous n'avez pas de compte ?"
+
+#: website/templates/login.html:35
+msgid "Sign up here"
+msgstr "Inscrivez-vous ici"
+
+#: website/templates/signup.html:11
+msgid "NEW RESIDENT"
+msgstr "NOUVEAU RÉSIDENT"
+
+#: website/templates/signup.html:12
+msgid "Create your account"
+msgstr "Créez votre compte"
+
+#: website/templates/signup.html:20
+msgid "We'll never share your email with anyone else."
+msgstr "Nous ne partagerons jamais votre e-mail avec qui que ce soit."
+
+#: website/templates/signup.html:25
+msgid "First Name"
+msgstr "Prénom"
+
+#: website/templates/signup.html:26
+msgid "Enter your first name"
+msgstr "Saisissez votre prénom"
+
+#: website/templates/signup.html:30
+msgid "Last Name"
+msgstr "Nom"
+
+#: website/templates/signup.html:31
+msgid "Enter your last name"
+msgstr "Saisissez votre nom"
+
+#: website/templates/signup.html:37
+msgid "Create a password (min 7 characters)"
+msgstr "Créez un mot de passe (7 caractères min.)"
+
+#: website/templates/signup.html:38
+msgid "Must be at least 7 characters long."
+msgstr "Doit contenir au moins 7 caractères."
+
+#: website/templates/signup.html:42
+msgid "Confirm Password"
+msgstr "Confirmez le mot de passe"
+
+#: website/templates/signup.html:43
+msgid "Confirm your password"
+msgstr "Confirmez votre mot de passe"
+
+#: website/templates/signup.html:47
+msgid "Create Account"
+msgstr "Créer le compte"
+
+#: website/templates/signup.html:54
+msgid "Already have an account?"
+msgstr "Vous avez déjà un compte ?"
+
+#: website/templates/signup.html:54
+msgid "Login here"
+msgstr "Connectez-vous ici"

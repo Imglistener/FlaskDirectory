@@ -49,7 +49,7 @@ def dashboard():
 @login_required
 @roles_required(UserRole.ADMIN)
 def dashboard_admin():
-    students = Students.query.order_by(Students.name).all()
+    students = Students.query.order_by(Students.last_name, Students.first_name).all()
     users = User.query.order_by(User.first_name).all()
     rooms = Room.query.order_by(Room.name).all()
     absences = AbsenceNotice.query.order_by(AbsenceNotice.date.desc()).all()
@@ -107,18 +107,24 @@ def add_student():
         linked_user_id = linked_user.id
 
     new_student = Students(
-        name=request.form.get('name'),
+        niveau=request.form.get('niveau'),
+        filiere=request.form.get('filiere'),
+        classe=request.form.get('classe'),
         student_code=request.form.get('student_code'),
-        internal_number=request.form.get('internal_number'),
-        level_and_section=request.form.get('level_and_section'),
-        national_id=request.form.get('national_id'),
+        cne=request.form.get('cne'),
+        last_name=request.form.get('last_name'),
+        first_name=request.form.get('first_name'),
         sex=Gender(request.form.get('sex')),
         birth_date=birth_date,
+        birth_place=request.form.get('birth_place'),
+        nationality=request.form.get('nationality'),
+        national_id=request.form.get('national_id'),
         email=request.form.get('email') or None,
+        home_phone=request.form.get('home_phone'),
         phone=request.form.get('phone'),
         address=request.form.get('address'),
-        nationality=request.form.get('nationality'),
-        home_town=request.form.get('home_town'),
+        city=request.form.get('city'),
+        status=StudentStatus(request.form.get('status')) if request.form.get('status') else StudentStatus.ACTIVE,
         emergency_contact=request.form.get('emergency_contact'),
         emergency_phone=request.form.get('emergency_phone'),
         check_in_date=check_in_date,
@@ -136,17 +142,27 @@ def add_student():
 @roles_required(UserRole.ADMIN)
 def edit_student(student_id):
     student = Students.query.get_or_404(student_id)
-    student.name = request.form.get('name', student.name)
+    student.niveau = request.form.get('niveau', student.niveau)
+    student.filiere = request.form.get('filiere', student.filiere)
+    student.classe = request.form.get('classe', student.classe)
     student.student_code = request.form.get('student_code', student.student_code)
-    student.internal_number = request.form.get('internal_number', student.internal_number)
-    student.level_and_section = request.form.get('level_and_section', student.level_and_section)
+    student.cne = request.form.get('cne', student.cne)
+    student.last_name = request.form.get('last_name', student.last_name)
+    student.first_name = request.form.get('first_name', student.first_name)
+    student.birth_place = request.form.get('birth_place', student.birth_place)
+    student.nationality = request.form.get('nationality', student.nationality)
+    student.national_id = request.form.get('national_id', student.national_id)
     student.phone = request.form.get('phone', student.phone)
+    student.home_phone = request.form.get('home_phone', student.home_phone)
     student.email = request.form.get('email') or student.email
     student.address = request.form.get('address', student.address)
-    student.nationality = request.form.get('nationality', student.nationality)
-    student.home_town = request.form.get('home_town', student.home_town)
+    student.city = request.form.get('city', student.city)
     student.emergency_contact = request.form.get('emergency_contact', student.emergency_contact)
     student.emergency_phone = request.form.get('emergency_phone', student.emergency_phone)
+
+    sex_value = request.form.get('sex')
+    if sex_value:
+        student.sex = Gender(sex_value)
 
     check_in_date, err = _parse_optional_date('check_in_date', request.form)
     if err:
@@ -338,7 +354,7 @@ def remove_student_from_room(room_id, student_id):
 @login_required
 @roles_required(UserRole.ADMIN)
 def auto_sort_students():
-    unassigned = Students.query.filter_by(room_id=None).order_by(Students.name).all()
+    unassigned = Students.query.filter_by(room_id=None).order_by(Students.last_name, Students.first_name).all()
     rooms = Room.query.all()
 
     assigned_count = 0
@@ -391,7 +407,7 @@ def delete_absence_notice(notice_id):
 @login_required
 @roles_required(UserRole.MODERATOR)
 def dashboard_moderator():
-    students = Students.query.order_by(Students.name).all()
+    students = Students.query.order_by(Students.last_name, Students.first_name).all()
     absences = AbsenceNotice.query.order_by(AbsenceNotice.date.desc()).all()
     return render_template("dashboard_moderator.html", user=current_user, students=students, absences=absences)
 
@@ -412,10 +428,12 @@ def dashboard_student():
             flash(_('No student profile is linked to your account yet. Contact an administrator.'), category='error')
             return redirect(url_for('views.dashboard_student'))
 
-        # Normal users may only update their own contact-type details,
-        # not identity fields like name/student code/national ID.
+        # Normal users may only update their own contact-type details, not
+        # identity/academic fields like name/student code/CNE/national ID.
         profile.phone = request.form.get('phone', profile.phone)
+        profile.home_phone = request.form.get('home_phone', profile.home_phone)
         profile.address = request.form.get('address', profile.address)
+        profile.city = request.form.get('city', profile.city)
         profile.emergency_contact = request.form.get('emergency_contact', profile.emergency_contact)
         profile.emergency_phone = request.form.get('emergency_phone', profile.emergency_phone)
         db.session.commit()

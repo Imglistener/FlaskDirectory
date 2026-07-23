@@ -15,6 +15,16 @@ class Gender(enum.Enum):
     FEMALE = "female"
 
 
+# Human-readable (French) labels used by the school registry export, mapped
+# to/from the internal Gender enum. Used by the import script and anywhere
+# we need to display or parse the "Genre" column.
+GENDER_FR_LABELS = {
+    Gender.MALE: "Masculin",
+    Gender.FEMALE: "Féminin",
+}
+GENDER_FR_LOOKUP = {v: k for k, v in GENDER_FR_LABELS.items()}
+
+
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -70,9 +80,21 @@ class User(db.Model, UserMixin):
 
 
 class StudentStatus(enum.Enum):
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    GRADUATED = "graduated"
+    ACTIVE = "active"          # Actif
+    WITHDRAWN = "withdrawn"    # Abandonné
+    INACTIVE = "inactive"      # temporarily inactive (not part of the registry export)
+    GRADUATED = "graduated"    # not part of the registry export
+
+
+# Human-readable (French) labels used by the school registry export's
+# "Etat" column, mapped to/from the internal StudentStatus enum.
+STATUS_FR_LABELS = {
+    StudentStatus.ACTIVE: "Actif",
+    StudentStatus.WITHDRAWN: "Abandonné",
+    StudentStatus.INACTIVE: "Inactif",
+    StudentStatus.GRADUATED: "Diplômé",
+}
+STATUS_FR_LOOKUP = {v: k for k, v in STATUS_FR_LABELS.items()}
 
 
 class Students(db.Model):
@@ -80,28 +102,55 @@ class Students(db.Model):
     # Links a student data record to the User account that owns it, so a
     # normal user can be scoped to only their own row.
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=True)
-    name = db.Column(db.String(100), nullable=False)
-    student_code = db.Column(db.String(20), nullable=False)
-    internal_number = db.Column(db.String(20), nullable=False)
-    level_and_section = db.Column(db.String(50), nullable=False)
-    national_id = db.Column(db.String(20), nullable=False)
-    sex = db.Column(db.Enum(Gender), nullable=False)
-    birth_date = db.Column(db.Date, nullable=False)
+
+    # --- Academic identifiers, as they appear in the official school
+    # registry export (Niveau / Filière / Classe / Code Élève / CNE). ---
+    niveau = db.Column(db.String(50), nullable=False)            # e.g. "Première Année"
+    filiere = db.Column(db.String(50), nullable=False)           # e.g. "ECS", "MP"
+    classe = db.Column(db.String(50), nullable=False)            # e.g. "1-ECS-1"
+    student_code = db.Column(db.String(20), nullable=False)      # Code Élève
+    cne = db.Column(db.String(20), nullable=False, unique=True)  # CNE (national student number)
+
+    # --- Identity ---
+    last_name = db.Column(db.String(100), nullable=False)        # Nom
+    first_name = db.Column(db.String(100), nullable=False)       # Prénom
+    sex = db.Column(db.Enum(Gender), nullable=False)              # Genre
+    birth_date = db.Column(db.Date, nullable=False)               # Date Naiss.
+    birth_place = db.Column(db.String(100))                      # Lieu Naiss.
+    nationality = db.Column(db.String(50))                       # Nationalité
+    national_id = db.Column(db.String(20))                       # No CNI
+
+    # --- Contact ---
     email = db.Column(db.String(100), unique=True)
-    phone = db.Column(db.String(20))
-    status = db.Column(db.Enum(StudentStatus), nullable=False, default=StudentStatus.ACTIVE)
-    address = db.Column(db.Text)
+    home_phone = db.Column(db.String(20))                        # Tél. Domicile
+    phone = db.Column(db.String(20))                             # GSM
+    address = db.Column(db.Text)                                 # Adresse
+    city = db.Column(db.String(100))                             # Ville
+
+    status = db.Column(db.Enum(StudentStatus), nullable=False, default=StudentStatus.ACTIVE)  # Etat
+
+    # --- Dormitory-specific fields (not part of the registry export) ---
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=True)
     dormitory_id = db.Column(db.Integer, nullable=True)
     check_in_date = db.Column(db.Date)
     check_out_date = db.Column(db.Date)
     emergency_contact = db.Column(db.String(100))
     emergency_phone = db.Column(db.String(20))
-    nationality = db.Column(db.String(50))
-    home_town = db.Column(db.String(100))
     photo = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, nullable=False, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, nullable=False, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+    @property
+    def name(self):
+        """Full display name ("Prénom Nom"). Kept as a convenience property
+        since so much of the UI just wants one string to show."""
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def level_and_section(self):
+        """Convenience label combining Niveau/Filière/Classe, e.g.
+        "1-ECS-1 · Première Année (ECS)"."""
+        return f"{self.classe} — {self.niveau} ({self.filiere})"
 
 
 class AbsenceNotice(db.Model):

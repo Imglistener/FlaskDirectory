@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Supervisor Dashboard') }}{% endblock %}
+
+{% block content %}
+{% set full_name = current_user.first_name ~ ' ' ~ current_user.last_name %}
+{% set name_size = [2.3 - (full_name|length * 0.045), 1.1]|max %}
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="key-tag mb-4">
+            <div class="key-tag__header">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('SUPERVISOR') }}</span>
+                <h2 class="key-tag__title dashboard-name" style="font-size: {{ name_size }}rem;">{{ _('Hi, %(name)s', name=current_user.first_name) }}</h2>
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <div class="px-3 pt-3">
+                <span class="eyebrow">{{ _('Quick Links') }}</span>
+            </div>
+            <div class="list-group list-group-flush mt-2">
+                <a href="#students" class="list-group-item list-group-item-action">{{ _('Student Records') }}</a>
+                <a href="#rooms" class="list-group-item list-group-item-action">{{ _('Rooms') }}</a>
+                <a href="#absences" class="list-group-item list-group-item-action">{{ _('Absence Notices') }}</a>
+                <a href="#accounts" class="list-group-item list-group-item-action">{{ _('Manage Accounts') }}</a>
+                <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action text-danger">{{ _('Logout') }}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <span class="eyebrow">{{ _('Full Access · View &amp; Edit') }}</span>
+        <h1 class="mb-4">{{ _('Supervisor Dashboard') }}</h1>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="stat-tag">
+                    <span class="eyebrow">{{ _('Total Students') }}</span>
+                    <div class="stat-value">{{ students|length }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-tag">
+                    <span class="eyebrow">{{ _('Active') }}</span>
+                    <div class="stat-value">{{ students|selectattr('status.value', 'equalto', 'active')|list|length }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-tag">
+                    <span class="eyebrow">{{ _('Rooms') }}</span>
+                    <div class="stat-value">{{ rooms|length }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-tag">
+                    <span class="eyebrow">{{ _('Absence Notices') }}</span>
+                    <div class="stat-value">{{ absences|length }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STUDENT RECORDS -->
+        <div id="students" class="key-tag mb-4">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('RECORDS') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('Student Records') }}</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+
+                <button class="btn btn-tag-outline btn-sm mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#addStudentForm">
+                    {{ _('+ Add Student') }}
+                </button>
+
+                <div class="collapse mb-4" id="addStudentForm">
+                    <form method="POST" action="{{ url_for('views.add_student') }}" class="row g-2 p-3" style="background: var(--cream); border-radius: 12px;">
+                        <div class="col-12"><span class="eyebrow">{{ _('Academic') }}</span></div>
+                        <div class="col-md-4"><input class="form-control" name="niveau" placeholder="{{ _('Level (e.g. Première Année)') }}" required></div>
+                        <div class="col-md-4"><input class="form-control" name="filiere" placeholder="{{ _('Track (e.g. ECS)') }}" required></div>
+                        <div class="col-md-4"><input class="form-control" name="classe" placeholder="{{ _('Class (e.g. 1-ECS-1)') }}" required></div>
+                        <div class="col-md-4"><input class="form-control" name="student_code" placeholder="{{ _('Student code') }}" required></div>
+                        <div class="col-md-4"><input class="form-control" name="cne" placeholder="{{ _('CNE') }}" required></div>
+                        <div class="col-md-4">
+                            <select class="form-control" name="status">
+                                {% for s in StudentStatus %}
+                                <option value="{{ s.value }}" {% if s.name == 'ACTIVE' %}selected{% endif %}>{{ s.value.title() }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-12 mt-3"><span class="eyebrow">{{ _('Identity') }}</span></div>
+                        <div class="col-md-4"><input class="form-control" name="last_name" placeholder="{{ _('Last name') }}" required></div>
+                        <div class="col-md-4"><input class="form-control" name="first_name" placeholder="{{ _('First name') }}" required></div>
+                        <div class="col-md-4">
+                            <select class="form-control" name="sex" required>
+                                <option value="" disabled selected>{{ _('Sex') }}</option>
+                                {% for g in Gender %}
+                                <option value="{{ g.value }}">{{ g.name.title() }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">{{ _('Birth date') }}</label>
+                            <input class="form-control" type="date" name="birth_date" required>
+                        </div>
+                        <div class="col-md-4"><input class="form-control" name="birth_place" placeholder="{{ _('Birth place') }}"></div>
+                        <div class="col-md-4"><input class="form-control" name="national_id" placeholder="{{ _('National ID') }}"></div>
+                        <div class="col-md-4"><input class="form-control" name="nationality" placeholder="{{ _('Nationality') }}"></div>
+
+                        <div class="col-12 mt-3"><span class="eyebrow">{{ _('Contact') }}</span></div>
+                        <div class="col-md-4"><input class="form-control" type="email" name="email" placeholder="{{ _('Email (optional)') }}"></div>
+                        <div class="col-md-4"><input class="form-control" name="phone" placeholder="{{ _('Mobile phone') }}"></div>
+                        <div class="col-md-4"><input class="form-control" name="home_phone" placeholder="{{ _('Home phone') }}"></div>
+                        <div class="col-md-8"><input class="form-control" name="address" placeholder="{{ _('Address') }}"></div>
+                        <div class="col-md-4"><input class="form-control" name="city" placeholder="{{ _('City') }}"></div>
+                        <div class="col-md-6"><input class="form-control" name="emergency_contact" placeholder="{{ _('Emergency contact name') }}"></div>
+                        <div class="col-md-6"><input class="form-control" name="emergency_phone" placeholder="{{ _('Emergency contact phone') }}"></div>
+
+                        <div class="col-12 mt-3"><span class="eyebrow">{{ _('Dormitory') }}</span></div>
+                        <div class="col-md-4">
+                            <select class="form-control" name="user_id">
+                                <option value="">{{ _('No linked account') }}</option>
+                                {% for u in unlinked_users %}
+                                <option value="{{ u.id }}">{{ u.first_name }} {{ u.last_name }} ({{ u.email }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">{{ _('Check-in date') }}</label>
+                            <input class="form-control" type="date" name="check_in_date">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">{{ _('Check-out date') }}</label>
+                            <input class="form-control" type="date" name="check_out_date">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <button type="submit" class="btn btn-tag btn-sm">{{ _('Save Student') }}</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-tag mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Code') }}</th>
+                                <th>{{ _('CNE') }}</th>
+                                <th>{{ _('Class') }}</th>
+                                <th>{{ _('Status') }}</th>
+                                <th>{{ _('Room') }}</th>
+                                <th>{{ _('Phone') }}</th>
+                                <th>{{ _('Account') }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.student_code }}</td>
+                                <td>{{ student.cne }}</td>
+                                <td>{{ student.classe }} <span class="text-muted small">({{ student.filiere }})</span></td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if student.status.value == 'active' else ('secondary' if student.status.value in ('inactive', 'withdrawn') else 'info') }}">
+                                        {{ student.status.value.title() }}
+                                    </span>
+                                </td>
+                                <td>{{ student.room.name if student.room else '—' }}</td>
+                                <td>{{ student.phone or '—' }}</td>
+                                <td>
+                                    {% if student.account %}
+                                    <span class="badge bg-navy">{{ student.account.email }}</span>
+                                    {% else %}
+                                    <span class="text-muted small">{{ _('not linked') }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-tag-outline" type="button" data-bs-toggle="collapse" data-bs-target="#edit-{{ student.id }}">{{ _('Edit') }}</button>
+                                </td>
+                            </tr>
+                            <tr class="collapse" id="edit-{{ student.id }}">
+                                <td colspan="9">
+                                    <form method="POST" action="{{ url_for('views.edit_student', student_id=student.id) }}" class="row g-2 p-3" style="background: var(--cream); border-radius: 12px;">
+                                        <div class="col-12"><span class="eyebrow">{{ _('Academic') }}</span></div>
+                                        <div class="col-md-4"><input class="form-control" name="niveau" value="{{ student.niveau }}" placeholder="{{ _('Level') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="filiere" value="{{ student.filiere }}" placeholder="{{ _('Track') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="classe" value="{{ student.classe }}" placeholder="{{ _('Class') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="student_code" value="{{ student.student_code }}" placeholder="{{ _('Student code') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="cne" value="{{ student.cne }}" placeholder="{{ _('CNE') }}"></div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="status">
+                                                {% for s in StudentStatus %}
+                                                <option value="{{ s.value }}" {% if student.status == s %}selected{% endif %}>{{ s.value.title() }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 mt-3"><span class="eyebrow">{{ _('Identity') }}</span></div>
+                                        <div class="col-md-4"><input class="form-control" name="last_name" value="{{ student.last_name }}" placeholder="{{ _('Last name') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="first_name" value="{{ student.first_name }}" placeholder="{{ _('First name') }}"></div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="sex">
+                                                {% for g in Gender %}
+                                                <option value="{{ g.value }}" {% if student.sex == g %}selected{% endif %}>{{ g.name.title() }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small text-muted mb-1">{{ _('Birth date') }}</label>
+                                            <input class="form-control" type="date" name="birth_date" value="{{ student.birth_date.strftime('%Y-%m-%d') if student.birth_date else '' }}">
+                                        </div>
+                                        <div class="col-md-4"><input class="form-control" name="birth_place" value="{{ student.birth_place or '' }}" placeholder="{{ _('Birth place') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="national_id" value="{{ student.national_id or '' }}" placeholder="{{ _('National ID') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="nationality" value="{{ student.nationality or '' }}" placeholder="{{ _('Nationality') }}"></div>
+
+                                        <div class="col-12 mt-3"><span class="eyebrow">{{ _('Contact') }}</span></div>
+                                        <div class="col-md-4"><input class="form-control" type="email" name="email" value="{{ student.email or '' }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="phone" value="{{ student.phone or '' }}" placeholder="{{ _('Mobile phone') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="home_phone" value="{{ student.home_phone or '' }}" placeholder="{{ _('Home phone') }}"></div>
+                                        <div class="col-md-8"><input class="form-control" name="address" value="{{ student.address or '' }}" placeholder="{{ _('Address') }}"></div>
+                                        <div class="col-md-4"><input class="form-control" name="city" value="{{ student.city or '' }}" placeholder="{{ _('City') }}"></div>
+                                        <div class="col-md-6"><input class="form-control" name="emergency_contact" value="{{ student.emergency_contact or '' }}" placeholder="{{ _('Emergency contact name') }}"></div>
+                                        <div class="col-md-6"><input class="form-control" name="emergency_phone" value="{{ student.emergency_phone or '' }}" placeholder="{{ _('Emergency contact phone') }}"></div>
+
+                                        <div class="col-12 mt-3"><span class="eyebrow">{{ _('Dormitory') }}</span></div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small text-muted mb-1">{{ _('Check-in date') }}</label>
+                                            <input class="form-control" type="date" name="check_in_date" value="{{ student.check_in_date.strftime('%Y-%m-%d') if student.check_in_date else '' }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small text-muted mb-1">{{ _('Check-out date') }}</label>
+                                            <input class="form-control" type="date" name="check_out_date" value="{{ student.check_out_date.strftime('%Y-%m-%d') if student.check_out_date else '' }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small text-muted mb-1">{{ _('Linked account') }}</label>
+                                            <select class="form-control" name="user_id">
+                                                <option value="">{{ _('No linked account') }}</option>
+                                                {% if student.account %}
+                                                <option value="{{ student.account.id }}" selected>{{ student.account.first_name }} {{ student.account.last_name }} ({{ student.account.email }})</option>
+                                                {% endif %}
+                                                {% for u in unlinked_users %}
+                                                <option value="{{ u.id }}">{{ u.first_name }} {{ u.last_name }} ({{ u.email }})</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-12 d-flex gap-2 mt-2">
+                                            <button type="submit" class="btn btn-tag btn-sm">{{ _('Save Changes') }}</button>
+                                        </div>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('views.delete_student', student_id=student.id) }}" class="px-3 pb-3"
+                                          onsubmit="return confirm('{{ _('Delete this student record permanently?') }}');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">{{ _('Delete Record') }}</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="9" class="text-center text-muted py-4">{{ _('No student records yet.') }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROOM MANAGEMENT -->
+        <div id="rooms" class="key-tag mb-4">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('HOUSING') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('Rooms') }}</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+
+                <div class="d-flex gap-2 mb-3 flex-wrap">
+                    <button class="btn btn-tag-outline btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#addRoomForm">
+                        {{ _('+ Add Room') }}
+                    </button>
+                    <form method="POST" action="{{ url_for('views.auto_sort_students') }}"
+                          onsubmit="return confirm('{{ _('Auto-assign all unassigned students into rooms matching their sex?') }}');">
+                        <button type="submit" class="btn btn-tag-outline btn-sm">{{ _('Auto-sort Unassigned Students') }}</button>
+                    </form>
+                </div>
+
+                <div class="collapse mb-4" id="addRoomForm">
+                    <form method="POST" action="{{ url_for('views.add_room') }}" class="row g-2 p-3" style="background: var(--cream); border-radius: 12px;">
+                        <div class="col-md-4"><input class="form-control" name="name" placeholder="{{ _('Room name / number') }}" required></div>
+                        <div class="col-md-4">
+                            <select class="form-control" name="sex" required>
+                                <option value="" disabled selected>{{ _('Dormitory type') }}</option>
+                                {% for g in Gender %}
+                                <option value="{{ g.value }}">{{ g.name.title() }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4"><input class="form-control" type="number" min="1" name="max_occupancy" placeholder="{{ _('Max occupancy') }}" required></div>
+                        <div class="col-12 mt-2">
+                            <button type="submit" class="btn btn-tag btn-sm">{{ _('Save Room') }}</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row g-3">
+                    {% for room in rooms %}
+                    <div class="col-md-6">
+                        <div class="profile-card p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                                <div>
+                                    <strong>{{ room.name }}</strong>
+                                    <span class="badge bg-navy ms-2">{{ room.sex.value.title() }}</span>
+                                    <span class="badge bg-{{ 'success' if room.occupant_count < room.max_occupancy else 'secondary' }} ms-1">
+                                        {{ room.occupant_count }} / {{ room.max_occupancy }}
+                                    </span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-tag-outline" type="button" data-bs-toggle="collapse" data-bs-target="#edit-room-{{ room.id }}">{{ _('Edit') }}</button>
+                                    <form method="POST" action="{{ url_for('views.delete_room', room_id=room.id) }}"
+                                          onsubmit="return confirm('{{ _('Delete this room? Assigned students will be unassigned.') }}');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">{{ _('Delete') }}</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="collapse mt-3" id="edit-room-{{ room.id }}">
+                                <form method="POST" action="{{ url_for('views.edit_room', room_id=room.id) }}" class="row g-2 p-3" style="background: var(--cream); border-radius: 12px;">
+                                    <div class="col-md-4"><input class="form-control" name="name" value="{{ room.name }}"></div>
+                                    <div class="col-md-4">
+                                        <select class="form-control" name="sex">
+                                            {% for g in Gender %}
+                                            <option value="{{ g.value }}" {% if room.sex == g %}selected{% endif %}>{{ g.name.title() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4"><input class="form-control" type="number" min="{{ room.occupant_count }}" name="max_occupancy" value="{{ room.max_occupancy }}"></div>
+                                    <div class="col-12 mt-2">
+                                        <button type="submit" class="btn btn-tag btn-sm">{{ _('Save Changes') }}</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <ul class="list-group list-group-flush mt-3">
+                                {% for student in room.students %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    {{ student.name }}
+                                    <form method="POST" action="{{ url_for('views.remove_student_from_room', room_id=room.id, student_id=student.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">{{ _('Remove') }}</button>
+                                    </form>
+                                </li>
+                                {% else %}
+                                <li class="list-group-item px-0 text-muted">{{ _('No students assigned yet.') }}</li>
+                                {% endfor %}
+                            </ul>
+
+                            {% if not room.is_full %}
+                            <form method="POST" action="{{ url_for('views.assign_student_to_room', room_id=room.id) }}" class="d-flex gap-2 mt-3">
+                                <select name="student_id" class="form-select form-select-sm" required>
+                                    <option value="" disabled selected>{{ _('Assign a student…') }}</option>
+                                    {% for student in students if student.room_id is none and student.sex == room.sex %}
+                                    <option value="{{ student.id }}">{{ student.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-tag-outline">{{ _('Assign') }}</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12">
+                        <p class="text-muted mb-0">{{ _('No rooms have been set up yet.') }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ABSENCE NOTICES -->
+        <div id="absences" class="key-tag mb-4">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('ABSENCES') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('Absence Notices') }}</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                <div class="table-responsive">
+                    <table class="table table-hover table-tag mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>{{ _('Student') }}</th>
+                                <th>{{ _('Date') }}</th>
+                                <th>{{ _('Reason') }}</th>
+                                <th>{{ _('Submitted') }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for notice in absences %}
+                            <tr>
+                                <td>{{ notice.student.name }}</td>
+                                <td>{{ notice.date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ notice.reason }}</td>
+                                <td>{{ notice.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td class="text-end">
+                                    <form method="POST" action="{{ url_for('views.delete_absence_notice', notice_id=notice.id) }}"
+                                          onsubmit="return confirm('{{ _('Remove this absence notice?') }}');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">{{ _('Dismiss') }}</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" class="text-center text-muted py-4">{{ _('No absence notices submitted yet.') }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCOUNT / ROLE MANAGEMENT -->
+        <div id="accounts" class="key-tag">
+            <div class="key-tag__header" style="padding-bottom: 1.2rem;">
+                <span class="key-tag__hole"></span>
+                <span class="key-tag__code">{{ _('ROLES') }}</span>
+                <h2 class="key-tag__title" style="font-size: 1.25rem;">{{ _('Manage Accounts') }}</h2>
+            </div>
+            <div class="key-tag__perf"></div>
+            <div class="key-tag__body pt-3">
+                <div class="table-responsive">
+                    <table class="table table-hover table-tag mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Email') }}</th>
+                                <th>{{ _('Role') }}</th>
+                                <th class="text-end">{{ _('Change Role') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                            <tr>
+                                <td>{{ u.first_name }} {{ u.last_name }}</td>
+                                <td>{{ u.email }}</td>
+                                <td><span class="badge bg-navy">{{ u.account_type.value }}</span></td>
+                                <td class="text-end">
+                                    {% if u.id == current_user.id %}
+                                        <span class="text-muted small">{{ _('(you)') }}</span>
+                                    {% else %}
+                                    <form method="POST" action="{{ url_for('views.update_user_role', user_id=u.id) }}" class="d-flex gap-2 justify-content-end">
+                                        <select name="account_type" class="form-select form-select-sm" style="width: auto;">
+                                            {% for role in UserRole %}
+                                            <option value="{{ role.name }}" {% if u.account_type == role %}selected{% endif %}>{{ role.value }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-tag-outline">{{ _('Update') }}</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
